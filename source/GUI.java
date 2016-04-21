@@ -472,7 +472,24 @@ public class GUI extends Display implements ActionListener, KeyListener {
 							"<td>" +
 								"<u>Graphical User Interface</u>:<br><br>" +
 								"<p>" +
-									"This Tetris game follows the classical rules that you can search online.  The left panel contains a variety of displays that display information about the game to the user.  The time section describes the uptime of the current game, and the score, level, and lines displays show exactly what you think they display.  The center panel is where the main Tetris game grid is displayed.  The panel on the right shows all the control buttons along with a panel that shows the next Tetris piece that will show up.  The two arrow icon buttons move the piece left and right respectively, and the two rotation icon buttons rotate the piece clockwise and counter clockwise respectively.  Below those buttons there are two types of drop buttons, the soft drop and the hard drop.  The hard drop drops the piece in place right away.  Below that you can see the gravity toggle that toggles between naive gravity and flood fill.  Finally in the lowest row, you can see that the pause button pauses and resumes the game play, whereas the music button toggles the game's audio." +
+									"This Tetris game follows the classical rules that you can se" +
+									"arch online.  The left panel contains a variety of displays " +
+									"that display information about the game to the user.  The ti" +
+									"me section describes the uptime of the current game, and the" +
+									" score, level, and lines displays show exactly what you thin" +
+									"k they display.  The center panel is where the main Tetris g" +
+									"ame grid is displayed.  The panel on the right shows all the" +
+									" control buttons along with a panel that shows the next Tetr" +
+									"is piece that will show up.  The two arrow icon buttons move" +
+									" the piece left and right respectively, and the two rotation" +
+									" icon buttons rotate the piece clockwise and counter clockwi" +
+									"se respectively.  Below those buttons there are two types of" +
+									" drop buttons, the soft drop and the hard drop.  The hard dr" +
+									"op drops the piece in place right away.  Below that you can " +
+									"see the gravity toggle that toggles between naive gravity an" +
+									"d flood fill.  Finally in the lowest row, you can see that t" +
+									"he pause button pauses and resumes the game play, whereas th" +
+									"e music button toggles the game's audio." +
 								"</p>" +
 							"</td>" +
 							"<td>" +
