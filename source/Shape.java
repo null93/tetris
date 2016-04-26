@@ -17,7 +17,7 @@ import java.awt.Color;
 public enum Shape {
 
 	// Define all the types of Tetris shapes
-	I, T, O, L, J, S, Z;
+	I, T, O, L, J, S, Z, Empty;
 
 	/**
 	 * Define a static function that will return the color associated with that shape type.  It will
@@ -43,6 +43,8 @@ public enum Shape {
 				return new Color ( 0x436FB6 );
 			case Z:
 				return new Color ( 0x427C7C );
+			case Empty:
+				return Color.WHITE;
 			default:
 				return Color.WHITE;
 		}
