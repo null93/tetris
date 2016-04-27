@@ -1,7 +1,6 @@
+import java.util.ArrayList;
 /**
- * This class will act as a mini-board, except it has the ability to operate function upon
- * the board such as rotation. This is our parent class which will be inherited out to other
- * shapes that we will create.
+ *
  * @version     1.0.0
  * @university  University of Illinois at Chicago
  * @course      CS342 - Software Design
@@ -15,154 +14,111 @@
 public class Tetromino
 {
 	/**
-	 * This data member will hold the size of the matrix for the shape to be encased in.
-	 * @var		int 			matrix_size				The length of the square matrix
+	 *	This data member stores an array list of the of the active position
+	 *	of this tetromino.
+	 *	@var	ArrayList <Cell>		pieces		Placeholder for each piece in this tetromino
 	 */
-	int matrix_size;
+	ArrayList <Cell> pieces;
 
-	/**
-	 * This data member will act as a mini-board which will be allocated based upon the shape
-	 * @var		Block[][]		matrix 					This will contain the shape within
-	 */
-	Block[][] matrix;
-
-	/**
-	 * This data member will keep track of the boundaries of the row
-	 * @var		int 			rowBound 					The endpoint boundary of the row
-	 */
-	int rowBound;
-
-	/**
-	 * This data member will keep track of the boundaries of the row
-	 * @var		int 			colBound 					The endpoint boundary of the col
-	 */
-	int colBound;
-
-	/* This constructor will take the size of the matrix and allocate the matrix to be empty
-	 */
-	public Tetromino (int size)
+	//Constructor of each tetromino
+	/* NEED IMPLEMENTATION OF FACTORY DESIGN PATTERN*/
+	public Tetromino()
 	{
-		matrix_size = size;
-		matrix = new Block[matrix_size][matrix_size];
-		for (int i = 0; i < matrix_size; i++)
+		pieces = new ArrayList <Cell>();
+	}
+
+
+	//Get width of the piece
+	double getWidth()
+	{
+		//Handle piece with no cell
+		if (pieces.size() == 0)
+			return 0;
+
+
+		double colMin = pieces.get(0).column;
+		double colMax = pieces.get(0).column;
+
+		for (int i = 1; i < pieces.size(); i++)
 		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				matrix[i][j] = new Block(i, j, Shape.Empty);
-			}
+			//Get the min column of the piece
+			if (colMin > pieces.get(i).column)
+				colMin = pieces.get(i).column;
+			
+			//Get the min column of the piece
+			if (colMax < pieces.get(i).column)
+				colMax = pieces.get(i).column;
+		}
+
+		double totWidth = colMax - colMin;
+		return totWidth;
+	}
+
+
+	//Get Height of the piece
+	double getHeight()
+	{
+		//Handle piece with no cell
+		if (pieces.size() == 0)
+			return 0;
+
+
+		double rowMin = pieces.get(0).row;
+		double rowMax = pieces.get(0).row;
+
+		for (int i = 1; i < pieces.size(); i++)
+		{
+			//Get the min row of the piece
+			if (rowMin > pieces.get(i).row)
+				rowMin = pieces.get(i).row;
+			
+			//Get the min row of the piece
+			if (rowMax < pieces.get(i).row)
+				rowMax = pieces.get(i).row;
+		}
+
+		double totHeight = rowMax - rowMin;
+		return totHeight;
+	}
+
+	//Assuming the coordinate 0, 0 is at bottom-left
+	void moveDown()
+	{
+		for (int i = 0; i < pieces.size(); i++)
+		{
+			Cell oldPiece = pieces.get(i);
+			pieces.set(i, new Cell(oldPiece.type, (oldPiece.row - 1), oldPiece.column));
 		}
 	}
 
-	/**
-	 * This function returns the size of the matrix
-	 * @return 		int
-	 */
-	protected int getSize()
+	//Assuming the coordinate 0, 0 is at bottom-left
+	void moveLeft()
 	{
-		return matrix_size;
-	}
-
-	/**
-	 * This function will act as a helper function to see if the the block will go out of bounds,
-	 * or if the current block is filled. This will validate our movement.
-	 * @param 		int 		row 					Check the current row position
-	 * @param 		int 		col 					Check the current column position 
-	 * @param 		Block[][] 	board 					Pass the board through the function
-	 * @return 		boolean
-	 */
-	protected boolean isValid(int row, int col, Block[][] board)
-	{
-		if (row < 0 || row >= rowBound)
-			return false;
-		if (col < 0 || col >= colBound)
-			return false;
-		if (board[row][col].isFilled)
-			return false;
-		else
-			return true;
-	}
-
-	/**
-	 * This function check if the current piece is able to move down
-	 * @param		Block[][]	board 					Pass the board through the function
-	 * @return 		boolean
-	 */
-	protected boolean canMoveDown(Block[][] board)
-	{
-		for (int i = 0; i < matrix_size; i++)
+		for (int i = 0; i < pieces.size(); i++)
 		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				if (matrix[i][j].isFilled)
-					if (!isValid(i - 1, j, board))
-						return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * This function check if the current piece is able to move left
-	 * @param		Block[][]	board 					Pass the board through the function
-	 * @return 		boolean
-	 */
-	protected boolean canMoveLeft(Block[][] board)
-	{
-		for (int i = 0; i < matrix_size; i++)
-		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				if (matrix[i][j].isFilled)
-					if (!isValid(i, j - 1, board))
-						return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * This function check if the current piece is able to move right
-	 * @param		Block[][]	board 					Pass the board through the function
-	 * @return 		boolean
-	 */
-	protected boolean canMoveRight(Block[][] board)
-	{
-		for (int i = 0; i < matrix_size; i++)
-		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				if (matrix[i][j].isFilled)
-					if (!isValid(i, j + 1, board))
-						return false;
-			}
-		}
-		return true;
-	}
-
-
-
-	protected void rotateRight()
-	{
-		for (int i = 0; i < matrix_size; i++)
-		{
-			for (int j = i + 1; j < matrix_size; j++)
-			{
-				Coordinate temp = matrix[i][j].getCoord();
-				matrix[i][j].setCoordinate(matrix[j][i].getCoord());
-				matrix[j][i].setCoordinate(temp);
-			}
-		}
-		
-		for (int i = 0; i < matrix_size / 2; i++)
-		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				Coordinate temp = matrix[j][i].getCoord();
-				matrix[j][i].setCoordinate(matrix[j][matrix_size - i - 1].getCoord());
-				matrix[j][i].setCoordinate(temp);
-			}
+			Cell oldPiece = pieces.get(i);
+			pieces.set(i, new Cell(oldPiece.type, oldPiece.row, (oldPiece.column - 1)));
 		}
 	}
 
+	//Assuming the coordinate 0, 0 is at bottom-left
+	void moveRight()
+	{
+		for (int i = 0; i < pieces.size(); i++)
+		{
+			Cell oldPiece = pieces.get(i);
+			pieces.set(i, new Cell(oldPiece.type, oldPiece.row, (oldPiece.column + 1)));
+		}
+	}
+
+	void rotateLeft()
+	{
+		/*TODO*/
+	}
+
+	void rotateRight()
+	{
+		/*TODO*/
+	}
 
 }
