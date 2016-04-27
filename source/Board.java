@@ -39,6 +39,8 @@ public class Board
 	//The board instance of tetris
 	static ArrayList <Cell> board;
 
+	boolean[][] isActive;
+
 	//Constructor for the board ***
 	public Board(double r, double c)
 	{
@@ -58,18 +60,130 @@ public class Board
 		next = null;
 
 		board = new ArrayList <Cell>();
+
+		//Used for deletion, set all settle pieces of cell if they are active or not
+		isActive = new boolean[(int) r][(int) c];
 	}
 
 	//Move the current piece down
-	void moveDown()
+	boolean moveDown()
 	{
+		//If the current can move down
+		for (int i = 0; i < current.pieces.size(); i++)
+		{
+			//Transverse through the board to check
+			for (int j = 0; j < board.size(); j++)
+			{
+				//Out of boundaries
+				if ((current.pieces.get(i).row - 1) < 0)
+					return false;
 
+				//A current cell exist there																							//May be needed for deleted cell
+				if ((board.get(i).row == current.pieces.get(i).row - 1) && (board.get(i).column == current.pieces.get(i).column))		// && (board.get(i).type == Shape.E))
+					return false;
+			}
+		}
+
+		//If we arrived here we pass all test and move piece down
+		current.moveDown();
+		return true;
+	}
+
+	//Move the current piece left
+	boolean moveLeft()
+	{
+		//If the current can move down
+		for (int i = 0; i < current.pieces.size(); i++)
+		{
+			//Transverse through the board to check
+			for (int j = 0; j < board.size(); j++)
+			{
+				//Out of boundaries
+				if ((current.pieces.get(i).column - 1) < 0)
+					return false;
+
+				//A current cell exist there																							//May be needed for deleted cell
+				if ((board.get(i).row == current.pieces.get(i).row) && (board.get(i).column == current.pieces.get(i).column - 1))		// && (board.get(i).type == Shape.E))
+					return false;
+			}
+		}
+
+		//If we arrived here we pass all test and move piece down
+		current.moveLeft();
+		return true;
+	}
+
+	//Move the current piece right
+	boolean moveRight()
+	{
+		//If the current can move down
+		for (int i = 0; i < current.pieces.size(); i++)
+		{
+			//Transverse through the board to check
+			for (int j = 0; j < board.size(); j++)
+			{
+				//Out of boundaries
+				if ((current.pieces.get(i).column + 1) >= columns)
+					return false;
+
+				//A current cell exist there																							//May be needed for deleted cell
+				if ((board.get(i).row == current.pieces.get(i).row) && (board.get(i).column == current.pieces.get(i).column + 1))		// && (board.get(i).type == Shape.E))
+					return false;
+			}
+		}
+
+		//If we arrived here we pass all test and move piece down
+		current.moveRight();
+		return true;
+	}
+
+	//Set what is settled on the board
+	void setActive()
+	{
+		//Reset the board 
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < columns; j++)
+			{
+				isActive[i][j] = false;
+			}
+		}
+
+		//Turn on all active pieces
+		for (int i = 0; i < board.size(); i++)
+		{
+			int r = (int) board.get(i).row;
+			int c = (int) board.get(i).column;
+
+			isActive[r][c] = true;
+		}
 	}
 
 	//render the board to GUI
-	void render()
+	ArrayList <Cell> render()
 	{
-		
+		ArrayList <Cell> newBoard = new ArrayList <Cell>();
+		//Render the current piece and the board to the GUI
+
+		//Get all active pieces of the board
+		for (int i = 0; i < board.size(); i++)
+		{
+			int r = (int) board.get(i).row;
+			int c = (int) board.get(i).column;
+
+			if (isActive[r][c])
+			{
+				newBoard.add(board.get(i));
+			}
+		}
+
+		//Add the current piece
+		for (int i = 0; i < current.pieces.size(); i++)
+		{
+			newBoard.add(current.pieces.get(i));
+		}
+
+		return newBoard;
 	}
 
 	//Operate end game
