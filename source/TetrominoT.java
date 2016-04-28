@@ -16,11 +16,11 @@ public class TetrominoT extends Tetromino
 	public TetrominoT()
 	{
 		super();
-		Cell pos1 = new Cell(Shape.I, Board.rows - 1, (double)(((int)Board.columns / 2)));
-		Cell pos2 = new Cell(Shape.I, Board.rows - 2, (double)(((int)Board.columns / 2)));
-		Cell pos3 = new Cell(Shape.I, Board.rows - 3, (double)(((int)Board.columns / 2)));
-		Cell pos4 = new Cell(Shape.I, Board.rows - 1, (double)(((int)Board.columns / 2) - 1));
-		Cell pos5 = new Cell(Shape.I, Board.rows - 1, (double)(((int)Board.columns / 2) + 1));
+		Cell pos1 = new Cell(Shape.T, Board.rows - 1, (double)(((int)Board.columns / 2)));
+		Cell pos2 = new Cell(Shape.T, Board.rows - 2, (double)(((int)Board.columns / 2)));
+		Cell pos3 = new Cell(Shape.T, Board.rows - 3, (double)(((int)Board.columns / 2)));
+		Cell pos4 = new Cell(Shape.T, Board.rows - 1, (double)(((int)Board.columns / 2) - 1));
+		Cell pos5 = new Cell(Shape.T, Board.rows - 1, (double)(((int)Board.columns / 2) + 1));
 
 		pieces.add(pos1);
 		pieces.add(pos2);

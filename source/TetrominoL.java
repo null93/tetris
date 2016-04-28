@@ -16,10 +16,10 @@ public class TetrominoL extends Tetromino
 	public TetrominoL()
 	{
 		super();
-		Cell pos1 = new Cell(Shape.I, Board.rows - 1, (double)(((int)Board.columns / 2)));
-		Cell pos2 = new Cell(Shape.I, Board.rows - 2, (double)(((int)Board.columns / 2)));
-		Cell pos3 = new Cell(Shape.I, Board.rows - 3, (double)(((int)Board.columns / 2)));
-		Cell pos4 = new Cell(Shape.I, Board.rows - 3, (double)(((int)Board.columns / 2) + 1));
+		Cell pos1 = new Cell(Shape.L, Board.rows - 1, (double)(((int)Board.columns / 2)));
+		Cell pos2 = new Cell(Shape.L, Board.rows - 2, (double)(((int)Board.columns / 2)));
+		Cell pos3 = new Cell(Shape.L, Board.rows - 3, (double)(((int)Board.columns / 2)));
+		Cell pos4 = new Cell(Shape.L, Board.rows - 3, (double)(((int)Board.columns / 2) + 1));
 
 		pieces.add(pos1);
 		pieces.add(pos2);
