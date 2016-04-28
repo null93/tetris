@@ -62,6 +62,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 */
 	private Clip clip;
 
+	protected Board board;
+
 	private HighscoresManager highscoresManager;
 
 	/**
@@ -77,6 +79,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		this.gamePanel = new GamePanel ();
 		this.displayPanel = new DisplayPanel ();
 		this.controlPanel = new ControlPanel ();
+		this.board = new Board(20, 10);
+		System.out.println("IN GUI delay: " + this.board.delay);
 		this.highscoresManager = new HighscoresManager();
 
 		/* Temporary test code for highscores */
@@ -190,9 +194,9 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 * @param   ArrayList <Cell>    grid            The array of cell pieces to render
 	 * @return  void
 	 */
-	protected void renderGrid ( ArrayList <Cell> grid ) {
+	protected void renderBoard ( ) {
 		// Forward back to the game panel
-		this.gamePanel.render ( grid );
+		this.gamePanel.render ( this.board.render() );
 	}
 
 	/**
@@ -277,6 +281,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
+		this.board.moveLeft();
+		this.renderBoard();
 	}
 
 	/**
@@ -289,6 +295,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
+		this.board.moveRight();
+		this.renderBoard();
 	}
 
 	/**
@@ -301,6 +309,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
+		this.board.current.rotate(Tetromino.Rotation.LEFT);
+		this.renderBoard();
 	}
 
 	/**
@@ -313,6 +323,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
+		this.board.current.rotate(Tetromino.Rotation.RIGHT);
+		this.renderBoard();
 	}
 
 	/**
@@ -325,6 +337,10 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
+		if(!this.board.moveDown())
+			this.board.setCurrent();
+		this.renderNext(this.board.next.pieces.get(1).type);
+		this.renderBoard();
 	}
 
 	/**
@@ -378,7 +394,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		this.updateLevel ( 0 );
 		this.updateScore ( 0 );
 		// Clear the game grid panel and the next piece panel grid
-		this.renderGrid ( new ArrayList <Cell> () );
+		this.board = new Board(20, 10);
+		this.renderBoard ( );
 		this.renderNext ( null );
 		// Reset the options
 		this.controlPanel.gravity.setText ( "Naive Gravity" );

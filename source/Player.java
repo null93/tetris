@@ -49,10 +49,10 @@ public class Player
             int p1Score = p1.getScore();
             int p2Score = p2.getScore();
 
-            if(p1Name.equals(p2Name))
-                return p2Score - p1Score;
+            if(p1Score == p2Score)
+                return p1Name.compareTo(p2Name);
 
-            return p1Name.compareTo(p2Name);
+            return p2Score - p1Score;
         }
     };
 
@@ -76,6 +76,6 @@ public class Player
 
     public String toString()
     {
-        return this.username + "\t" + this.score;
+        return this.username + "\t" + this.score + "\n";
     }
 }

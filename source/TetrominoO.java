@@ -25,5 +25,7 @@ public class TetrominoO extends Tetromino
 		pieces.add(pos2);
 		pieces.add(pos3);
 		pieces.add(pos4);
+
+		pivotCell = null;
 	}
 }

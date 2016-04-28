@@ -258,7 +258,7 @@ public class HighscoresManager
      * @param   String      password            Password to be hashed
      * @return  String      password_hash       Hashed password
      */
-    protected ArrayList<Player> getPlayers()
+    protected ArrayList<Player> getSortedPlayers()
     {
         Collections.sort(this.Players, Player.comparator);
         return this.Players;
