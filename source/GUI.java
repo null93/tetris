@@ -62,6 +62,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 */
 	private Clip clip;
 
+	private HighscoresManager highscoresManager;
+
 	/**
 	 * This constructor creates all the main panels and appends it to the main window panel. It also
 	 * initializes the theme music and creates the menu items.  In addition it also attaches all the
@@ -75,6 +77,18 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		this.gamePanel = new GamePanel ();
 		this.displayPanel = new DisplayPanel ();
 		this.controlPanel = new ControlPanel ();
+		this.highscoresManager = new HighscoresManager();
+
+		/* Temporary test code for highscores */
+
+        highscoresManager.addPlayer("Ben", 1000);
+        highscoresManager.addPlayer("Raf", 2000);
+        highscoresManager.addPlayer("Paul", 3000);
+        highscoresManager.addPlayer("raf", 3000);
+        highscoresManager.addPlayer("Ben", 1000);
+
+		/* End of test code for highscores */
+
 		// Add all the elements into the main panel
 		super.panel.add ( this.gamePanel );
 		super.panel.add ( this.displayPanel );
@@ -113,8 +127,10 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Create all the menu items
 		JMenuItem restart = new JMenuItem ( "Restart Game" );
 		JMenuItem quit = new JMenuItem ( "Quit" );
+		JMenuItem highscores = new JMenuItem( "Highscores" );
 		JMenuItem about = new JMenuItem ( "About" );
 		JMenuItem help = new JMenuItem ( "Help" );
+
 		// Attach an action listener to the items
 		restart.addActionListener ( new ActionListener () {
 			@Override
@@ -126,6 +142,12 @@ public class GUI extends Display implements ActionListener, KeyListener {
 			@Override
 			public void actionPerformed ( ActionEvent event ) {
 				quit ();
+			}
+		});
+		highscores.addActionListener ( new ActionListener () {
+			@Override
+			public void actionPerformed ( ActionEvent event ) {
+				highscores ();
 			}
 		});
 		about.addActionListener ( new ActionListener () {
@@ -145,12 +167,14 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		information.setMnemonic ( KeyEvent.VK_I );
 		restart.setMnemonic ( KeyEvent.VK_R );
 		quit.setMnemonic ( KeyEvent.VK_Q );
+		highscores.setMnemonic( KeyEvent.VK_S);
 		about.setMnemonic ( KeyEvent.VK_A );
 		help.setMnemonic ( KeyEvent.VK_H );
 		// Append the items to the file menu
 		file.add ( restart );
 		file.add ( quit );
 		// Append the items to the information menu
+		information.add( highscores );
 		information.add ( about );
 		information.add ( help );
 		// Add the menus to the menu bar
@@ -395,6 +419,56 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	protected void quit () {
 		// Simply quit the program
 		System.exit ( 0 );
+	}
+
+	/**
+	 * This function creates a new JFrame window and renders out the about menu in HTML.
+	 * @return  void
+	 */
+	protected void highscores () {
+		// Create a new JFrame instance and set the default properties
+		Display highscores = new Display ( "Highscores", 300, 350 );
+		highscores.setDefaultCloseOperation ( JFrame.DISPOSE_ON_CLOSE );
+		highscores.panel.setBackground ( new Color ( 0x1D1F1F ) );
+		// Create an HTML JLabel filled with the content
+
+		ArrayList<Player> sortedPlayers = highscoresManager.getSortedPlayers();
+
+		StringBuilder strBuilder = new StringBuilder();
+
+		for(int i = 1; i <= 10; i++)
+		{
+			if(i <= sortedPlayers.size())
+				strBuilder.append(i + ". " + sortedPlayers.get(i - 1).toString());
+			else
+				strBuilder.append(i + ". ...\n");
+		}
+
+		JLabel label = new JLabel (
+			"<html>" +
+				"<head>" +
+					"<style>" +
+						"b { color: #F6FAFA }" +
+						"body { color: #A8A8A8; font-family: 'Muli' }" +
+						"pre { font-family: 'Muli'; margin: 0px; }" +
+						"p { display: inline-block; }" +
+					"</style>" +
+				"</head>" +
+				"<body>" +
+					"<h2>" + 
+						"Top 10 Scores" + 
+					"</h2>" +
+					"<pre>" +
+						strBuilder.toString() +
+					"</pre>" +
+				"</body>" +
+			"</html>"
+		);
+		// Set the bounds of the label, and add it to the main window panel
+		label.setBounds ( 75, 35, 200, 200 );
+		highscores.panel.add ( label );
+		// Render out the about window
+		highscores.render ();
 	}
 
 	/**
@@ -657,6 +731,10 @@ public class GUI extends Display implements ActionListener, KeyListener {
 			case KeyEvent.VK_R:
 				// Bind the key press to the handler
 				restart ();
+				break;
+			case KeyEvent.VK_S:
+				// Bind the key press to the handler
+				highscores ();
 				break;
 			case KeyEvent.VK_A:
 				// Bind the key press to the handler
