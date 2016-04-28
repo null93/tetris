@@ -280,6 +280,42 @@ public class Board
 		}
 	}
 
+	//Set down the current and get next
+	void setCurrent()
+	{
+		//Set the current piece down
+		for (int i = 0; i < current.pieces.size(); i++)
+		{
+			board.add(current.pieces.get(i));
+			//current.remove(i);				//Unnecessary step maybe?
+		}
+
+		current = next;
+
+		Random rand = new Random();
+		//Get next piece ready
+		int i = rand.nextInt(7);
+		switch(i)
+		{
+			case 0:
+				next = new TetrominoI();
+			case 1:
+				next = new TetrominoT();
+			case 2:
+				next = new TetrominoO();
+			case 3:
+				next = new TetrominoL();
+			case 4:
+				next = new TetrominoJ();
+			case 5: 
+				next = new TetrominoS();
+			case 6:
+				next = new TetrominoZ();
+			default:
+				System.out.println("ERROR: randomization has failed");
+		}
+	}
+
 	//render the board to GUI
 	ArrayList <Cell> render()
 	{
