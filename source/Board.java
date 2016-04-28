@@ -59,16 +59,56 @@ public class Board
 
 		Random rand = new Random();
 
+		//randomize first 2 pieces then only modify next piece
 		int i = rand.nextInt(7);
+		switch(i)
+		{
+			case 0:
+				current = new TetrominoI();
+			case 1:
+				current = new TetrominoT();
+			case 2:
+				current = new TetrominoO();
+			case 3:
+				current = new TetrominoL();
+			case 4:
+				current = new TetrominoJ();
+			case 5: 
+				current = new TetrominoS();
+			case 6:
+				current = new TetrominoZ();
+			default:
+				System.out.println("ERROR: randomization has failed");
+		}
 
-		current = null;		//randomize first 2 pieces then only modify next piece
-		next = null;
+		int j = rand.nextInt(7);
+		switch(j)
+		{
+			case 0:
+				next = new TetrominoI();
+			case 1:
+				next = new TetrominoT();
+			case 2:
+				next = new TetrominoO();
+			case 3:
+				next = new TetrominoL();
+			case 4:
+				next = new TetrominoJ();
+			case 5: 
+				next = new TetrominoS();
+			case 6:
+				next = new TetrominoZ();
+			default:
+				System.out.println("ERROR: randomization has failed");
+		}
 
 		board = new ArrayList <Cell>();
 
 		//Used for deletion, set all settle pieces of cell if they are active or not
 		isActive = new boolean[(int) r][(int) c];
 	}
+
+
 
 	//Move the current piece down
 	boolean moveDown()
