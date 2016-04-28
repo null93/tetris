@@ -20,6 +20,9 @@ public class Tetromino
 	 */
 	ArrayList <Cell> pieces;
 
+	Cell 			 pivotCell;
+
+
 	//Constructor of each tetromino
 	/* NEED IMPLEMENTATION OF FACTORY DESIGN PATTERN*/
 	public Tetromino()
@@ -84,41 +87,91 @@ public class Tetromino
 	//Assuming the coordinate 0, 0 is at bottom-left
 	void moveDown()
 	{
-		for (int i = 0; i < pieces.size(); i++)
-		{
-			Cell oldPiece = pieces.get(i);
-			pieces.set(i, new Cell(oldPiece.type, (oldPiece.row - 1), oldPiece.column));
-		}
+		// for (int i = 0; i < pieces.size(); i++)
+		// {
+		// 	Cell oldPiece = pieces.get(i);
+		// 	pieces.set(i, new Cell(oldPiece.type, (oldPiece.row - 1), oldPiece.column));
+		// }
+		for(Cell cell : pieces)
+			cell.row--;
 	}
 
 	//Assuming the coordinate 0, 0 is at bottom-left
 	void moveLeft()
 	{
-		for (int i = 0; i < pieces.size(); i++)
-		{
-			Cell oldPiece = pieces.get(i);
-			pieces.set(i, new Cell(oldPiece.type, oldPiece.row, (oldPiece.column - 1)));
-		}
+		// for (int i = 0; i < pieces.size(); i++)
+		// {
+		// 	Cell oldPiece = pieces.get(i);
+		// 	pieces.set(i, new Cell(oldPiece.type, oldPiece.row, (oldPiece.column - 1)));
+		// }
+
+		for(Cell cell : pieces)
+			cell.column--;
 	}
 
 	//Assuming the coordinate 0, 0 is at bottom-left
 	void moveRight()
 	{
-		for (int i = 0; i < pieces.size(); i++)
+		// for (int i = 0; i < pieces.size(); i++)
+		// {
+		// 	Cell oldPiece = pieces.get(i);
+		// 	pieces.set(i, new Cell(oldPiece.type, oldPiece.row, (oldPiece.column + 1)));
+		// }
+		for(Cell cell : pieces)
+			cell.column++;
+	}
+
+	enum Rotation{
+		LEFT,
+		RIGHT
+	}
+
+	void rotate(Rotation rotation)
+	{
+		// For O piece
+		if(pivotCell == null)
+			return;
+		// Rotation matrix
+		// [ a b ] -> 90 degree: [  0 1 ] -> -90 degree: [ 0 -1 ]
+		// [ c d ]               [ -1 0 ]                [ 1  0 ]
+		int b;
+		int c;
+
+		if(rotation == Rotation.LEFT)
 		{
-			Cell oldPiece = pieces.get(i);
-			pieces.set(i, new Cell(oldPiece.type, oldPiece.row, (oldPiece.column + 1)));
+			b = -1;
+			c = 1;
 		}
-	}
+		else
+		{
+			b = 1;
+			c = -1;
+		}
 
-	void rotateLeft()
-	{
-		/*TODO*/
-	}
 
-	void rotateRight()
-	{
-		/*TODO*/
+		for(Cell cell : pieces)
+		{
+			// Getting a vector relative to the pivot
+			// VrelativetoP = [ cell.column - pivotCell.column ]
+			//                [ cell.row - pivotCell.row       ]
+			double vrpCol = cell.column - pivotCell.column;
+			double vrpRow = cell.row - pivotCell.row;
+
+			// Rotate the relative vector 
+			// [ a b ] [ vrpCol ] = [ vrpCol * a + vrpRow * b ] -> a and d are 0: [ vrpRow * b]
+			// [ c d ] [ vrpRow ]   [ vrpCol * c + vrpRow * d ]                   [ vrpCol * c]
+
+			double vRotatedCol = vrpRow * b;
+			double vRotatedRow = vrpCol * c;
+
+			// Change back the vector to be relative of origin
+			// VrelativetoO = [ vRotatedCol + pivotCell.column ]
+			//                [ vRotatedRow + pivotCell.row    ]
+			cell.column = vRotatedCol + pivotCell.column;
+			cell.row = vRotatedRow + pivotCell.row;
+		}
+
+		pivotCell = pieces.get(1);
 	}
 
 }
