@@ -17,37 +17,91 @@ import java.util.Random;
 
 public class Board
 {
-	//Board dimension
-	//Left double on purpose...
+	/**
+	 * This data member will hold the the width of the grid.
+	 * @var		double			rows 		Row dimension of the board
+	 * @static
+	 */
 	static double rows;
+
+	/**
+	 * This data member will hold the the height of the grid.
+	 * @var		double			columns 	Columns dimension of the board
+	 * @static
+	 */
 	static double columns;
 
-	//The current level
+	/**
+	 * This data member will bookkeep the current level.
+	 * @var 	int 			level		The current level
+	 * @static
+	 */
 	static int level;
 
-	//Flag for rotation
+	/**
+	 * This data member will act as a flag to determine if we skip loop in the thread.
+	 * @var 	boolean 		skipLoop	Set if we skip loop
+	 * @static
+	 */
 	static boolean skipLoop;
 
+	/**
+	 * This data member bookkeeps the delay, on which we sleep the thread until
+	 * we update the board and gameplay.
+	 * @var 	int 			delay 		The current delay until we update
+	 * @static
+	 */
 	static int delay;
 
-	//Update score
+	/**
+	 * This data member bookkeeps the current score, that is scored by the player,
+	 * when we clear a line.
+	 * @var 	int 			score 		Store the current score
+	 * @static
+	 */
 	static int score;
 
-	//Total lines cleared
+	/**
+	 * This data member bookkeeps the total amount of lines that the user have cleared
+	 * from the board.
+	 * @var 	int 			lines 		Store the current score
+	 * @static
+	 */
 	static int lines;
 	
 
 
-	//Set the proper prediction pieces for current and next
+	/**
+	 * This data member holds the current tetromino being operated on.
+	 *	@var		Tetromino 			Get the current active tetromino
+	 */
 	Tetromino current;
+
+	/**
+	 * This data member holds the next tetromino to be operated on.
+	 * This tetromino will become current after the current piece has
+	 * settle down.
+	 * @var			Tetromino 			Get the next tetromino
+	 */
 	Tetromino next;
 
-	//The board instance of tetris
+	/**
+	 * This holds a pointer to all the active cells in the board. A cell
+	 * will transfer from current to the board.
+	 * @var 		ArrayList <Cell>	Contains all the active pieces
+	 * @static		
+	 */
 	static ArrayList <Cell> board;
 
+	/**
+	 * This data member will act as a second instance of board, but this
+	 * will extract data from the board and determine if there is an
+	 * active piece in the grid.
+	 * @var			boolean[][]			Contains all the flags for each piece on the grid
+	 */
 	boolean[][] isActive;
 
-	//Constructor for the board ***
+	/* This is a constructor for the board, it will need the dimension of row by column. */
 	public Board(double r, double c)
 	{
 		//Set the dimension
@@ -57,16 +111,17 @@ public class Board
 		//Set the initial level
 		level = 1;
 
-		skipLoop = true;	//when we skip loop, we prevent piece to move down
+		//when we skip loop, we prevent piece to move down
+		skipLoop = true;	
 		
 		//delay = (50 - (level x 2)) / 60 seconds
 		delay = (50 - (level * 2) / 6000);
 
+		//Initialize the total number of lines cleared.
 		lines = 0;
 
-		Random rand = new Random();
-
 		//randomize first 2 pieces then only modify next piece
+		Random rand = new Random();
 		int i = rand.nextInt(7);
 		switch(i)
 		{
@@ -115,9 +170,11 @@ public class Board
 		isActive = new boolean[(int) r][(int) c];
 	}
 
-
-
-	//Move the current piece down
+	/**
+	 * This function will attempt to move the current tetromino down.
+	 * If failure to move down, then return false.
+	 * @return 		boolean			If we were able to move the current tetromino down
+	 */
 	boolean moveDown()
 	{
 		//If the current can move down
@@ -141,10 +198,13 @@ public class Board
 		return true;
 	}
 
-	//Move the current piece left
+	/**
+	 * This function will attempt to move the current tetromino left.
+	 * If failure to move down, then return false.
+	 * @return 		boolean			If we were able to move the current tetromino left
+	 */
 	boolean moveLeft()
 	{
-		//If the current can move down
 		for (int i = 0; i < current.pieces.size(); i++)
 		{
 			//Transverse through the board to check
@@ -165,10 +225,13 @@ public class Board
 		return true;
 	}
 
-	//Move the current piece right
+	/**
+	 * This function will attempt to move the current tetromino right.
+	 * If failure to move down, then return false.
+	 * @return 		boolean			If we were able to move the current tetromino right
+	 */
 	boolean moveRight()
 	{
-		//If the current can move down
 		for (int i = 0; i < current.pieces.size(); i++)
 		{
 			//Transverse through the board to check
@@ -189,7 +252,11 @@ public class Board
 		return true;
 	}
 
-	//Set what is settled on the board
+	/**
+	 * This function will get information from the board, and set them to
+	 * its proper statement depending on if there is an active piece on the grid.
+	 * @return 		void
+	 */
 	void setActive()
 	{
 		//Reset the board 
@@ -211,9 +278,13 @@ public class Board
 		}
 	}
 
-	//Check the board for any rows that are filled, delete the row
-	//Operate this function after current piece settles down
-	//Returns total number of lines cleared for score keeping
+	/**
+	 * This function goes through the grid to see if any rows are full. If so,
+	 * then we delete the row and keep track of how many rows we cleared. After
+	 * we delete the row, we will bring everything above it down by one. Repeat
+	 * until we check the whole grid.
+	 * @return 		int 		The total number of lines cleared
+	 */
 	int checkAndDelete()
 	{
 		int linesCleared = 0;
@@ -243,7 +314,12 @@ public class Board
 		return linesCleared;
 	}
 
-	//Delete the row frome the board
+	/**
+	 * This function is a helper function for checkAndDelete, which deletes the row
+	 * that is given by the parameter.
+	 * @param 		int 		row 		The selected row to be deleted
+	 * @return 		void
+	 */
 	void deleteRow(int row)
 	{
 		for (int i = 0; i < columns; i++)
@@ -258,7 +334,13 @@ public class Board
 		}
 	}
 
-	//Helper function to help bring everything down one, parameter will take the row that was just cleared
+	/**
+	 * This function is a helper function for checkAndDelete, which compacts the board
+	 * after deletion. With the given parameter as the row that was just deleted, we move
+	 * everything above it down by one.
+	 * @param 		int 		row 		The row that was recently deleted
+	 * @return 		void 
+	 */
 	void pack(int row)
 	{
 		for (int i = 0; i < board.size(); i++)
@@ -287,14 +369,20 @@ public class Board
 		}
 	}
 
-	//Set down the current and get next
+	/**
+	 * This function transfer the current tetromino to the board, which only happens
+	 * when we cannot move the current tetromino down anymore. Once we transfer the
+	 * current tetromino to the board, we set the current piece to the next piece,
+	 * then generate a new tetromino in the next piece.
+	 * @return 		void
+	 */
 	void setCurrent()
 	{
 		//Set the current piece down
 		for (int i = 0; i < current.pieces.size(); i++)
 		{
 			board.add(current.pieces.get(i));
-			//current.remove(i);				//Unnecessary step maybe?
+			current.pieces.remove(i);				//Unnecessary step maybe?
 		}
 
 		current = next;
@@ -324,6 +412,12 @@ public class Board
 	}
 
 	//This function updates the score
+	/**
+	 * This function updates the game board when a current piece has settle down.
+	 * We update the truth grid, see if there any any full lines and clear. Then
+	 * we update the score and total number of lines cleared.
+	 * @return 		void
+	 */
 	void update()
 	{
 		//Set the current piece down
@@ -340,20 +434,29 @@ public class Board
 		{
 			case 1:
 				score += 40 * level;
+				break;
 			case 2:
 				score += 100 * level;
+				break;
 			case 3:
 				score += 300 * level;
+				break;
 			case 4:
 				score += 1200 * level;
+				break;
 			default:
 				return;
 		}
 
+		//Update total number of lines cleared
 		lines += lineCleared;
 	}
 
-	//render the board to GUI
+	/**
+	 * This function updates a list to be render to the GUI. We store the board, and 
+	 * the current piece to this list.
+	 * @return 			ArrayList <Cell>
+	 */
 	ArrayList <Cell> render()
 	{
 		ArrayList <Cell> newBoard = new ArrayList <Cell>();
@@ -376,89 +479,16 @@ public class Board
 		{
 			newBoard.add(current.pieces.get(i));
 		}
-
 		return newBoard;
 	}
 
 	//Operate end game
+	/**
+	 * This function operates when the game is over, when a tetromino that got spawn
+	 * has overlapped.
+	 * @return  		void
+	 */
 	void gameOver()
 	{
-
 	}
-
-
-	// /**
-	//  * This data member will hold the row length of the board, and it will act as
-	//  * a boundary checker.
-	//  * @var 	int 			rows				The row dimension of the board
-	//  */
-	// protected int rows;
-
-	// /**
-	//  * This data member will hold the column length of the board, and it will act as
-	//  * a boundary checker.
-	//  * @var 	int 			columns				The column dimension of the board
-	//  */
-	// protected int columns;
-
-	// /**
-	//  * This data member will hold a grid of blocks as an infrastructure of the game
-	//  * @var 	Block[][] 			board			2D Array of blocks to act as the board
-	//  */
-	// protected Block[][] board;
-
-	// /* This constructor will initialize the board to empty with the proper dimension
-	//  */
-	// public Board()
-	// {
-	// 	rows = 20;
-	// 	columns = 10;
-	// 	board = new Block[rows][columns];
-
-	// 	for (int i = 0; i < rows; i++)
-	// 	{
-	// 		for (int j = 0; j < columns; j++)
-	// 		{
-	// 			board[i][j] = new Block(i + 1, j + 1, Shape.Empty);
-	// 		}
-	// 	}
-	// }
-
-	// *
-	//  * This function will store every single piece of the board into an arraylist
-	//  * of Cell to transfer over to the GUI and update the GUI.
-	//  * @return		ArrayList <Cell>
-	 
-	// protected ArrayList <Cell> updateBoard()
-	// {
-	// 	ArrayList <Cell> ret = new ArrayList <Cell> ();
-	// 	for (int i = 0; i < rows; i++)
-	// 	{
-	// 		for (int j = 0; j < columns; j++)
-	// 		{
-	// 			if (board[i][j].isFilled)
-	// 			ret.add(new Cell ( board[i][j].getType(), board[i][j].getRow(), board[i][j].getCol()));
-	// 		}
-	// 	}
-	// 	return ret;
-	// }
-
-
-	// protected void spawnTetromino()
-	// {
-	// 	Tetromino temp = new IShape();
-	// 	int size = temp.getSize();
-	// 	for (int i = 0; i < size; i++)
-	// 	{
-	// 		for (int j = 0; j < size; j++)
-	// 		{
-	// 			int newRow = rows  - 1 - temp.matrix[i][j].getRow();
-	// 			int newCol = (columns - 1) /2  - size/2 + temp.matrix[i][j].getCol();
-	// 			board[newRow][newCol].setBlock(newRow + 1, newCol + 1, temp.matrix[i][j].getType());
-	// 		}
-	// 	}
-
-	// }
-
-
 }
