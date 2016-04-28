@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class acts as the back end of the game. This class will operate all the functions
@@ -55,6 +56,10 @@ public class Board
 		
 		//delay = (50 - (level x 2)) / 60 seconds
 		delay = (50 - (level * 2) / 6000);
+
+		Random rand = new Random();
+
+		int i = rand.nextInt(7);
 
 		current = null;		//randomize first 2 pieces then only modify next piece
 		next = null;
@@ -156,6 +161,82 @@ public class Board
 			int c = (int) board.get(i).column;
 
 			isActive[r][c] = true;
+		}
+	}
+
+	//Check the board for any rows that are filled, delete the row
+	//Operate this function after current piece settles down
+	//Returns total number of lines cleared for score keeping
+	int checkAndDelete()
+	{
+		int linesCleared = 0;
+		for (int i = 0; i < rows; i++)
+		{
+			boolean rowIsFilled = true;
+			for (int j = 0; j < columns; j++)
+			{
+				//If row is not filled move onto next line
+				if (!isActive[i][j])
+					rowIsFilled = false;
+			}
+
+			if (rowIsFilled)
+			{
+				//Update lines cleared for score system
+				linesCleared++;
+				//Delete the rows
+				deleteRow(i);
+				//Now bring everything above it down one, above it
+				pack(i);
+				//Recheck that line
+				i--;
+			}
+
+		}
+		return linesCleared;
+	}
+
+	//Delete the row frome the board
+	void deleteRow(int row)
+	{
+		for (int i = 0; i < columns; i++)
+		{
+			isActive[row][i] = false;
+		}
+
+		for (int i = 0; i < board.size(); i++)
+		{
+			if (board.get(i).row == row)
+				board.remove(i);
+		}
+	}
+
+	//Helper function to help bring everything down one, parameter will take the row that was just cleared
+	void pack(int row)
+	{
+		for (int i = 0; i < board.size(); i++)
+		{
+			//The last row will need to get place in a temp
+			//Replace everything above it with row going down
+			if (board.get(i).row > row)
+			{
+				Cell temp = new Cell(board.get(i).type, (board.get(i).row - 1), board.get(i).column);
+				board.set(i, temp);
+			}
+		}
+
+		for (int i = row; i < rows - 1; i++)
+		{
+			//Update the boolean board
+			for (int j = 0; j < columns; j++)
+			{
+				isActive[i][j] = isActive[i + 1][j];
+			}
+		}
+		//Make the last row as all false
+		for (int i = 0; i < columns; i++)
+		{
+			isActive[row - 1][i] = false;
 		}
 	}
 
