@@ -30,6 +30,11 @@ public class Board
 
 	static int delay;
 
+	//Update score
+	static int score;
+
+	//Total lines cleared
+	static int lines;
 	
 
 
@@ -56,6 +61,8 @@ public class Board
 		
 		//delay = (50 - (level x 2)) / 60 seconds
 		delay = (50 - (level * 2) / 6000);
+
+		lines = 0;
 
 		Random rand = new Random();
 
@@ -278,6 +285,72 @@ public class Board
 		{
 			isActive[row - 1][i] = false;
 		}
+	}
+
+	//Set down the current and get next
+	void setCurrent()
+	{
+		//Set the current piece down
+		for (int i = 0; i < current.pieces.size(); i++)
+		{
+			board.add(current.pieces.get(i));
+			//current.remove(i);				//Unnecessary step maybe?
+		}
+
+		current = next;
+
+		Random rand = new Random();
+		//Get next piece ready
+		int i = rand.nextInt(7);
+		switch(i)
+		{
+			case 0:
+				next = new TetrominoI();
+			case 1:
+				next = new TetrominoT();
+			case 2:
+				next = new TetrominoO();
+			case 3:
+				next = new TetrominoL();
+			case 4:
+				next = new TetrominoJ();
+			case 5: 
+				next = new TetrominoS();
+			case 6:
+				next = new TetrominoZ();
+			default:
+				System.out.println("ERROR: randomization has failed");
+		}
+	}
+
+	//This function updates the score
+	void update()
+	{
+		//Set the current piece down
+		setCurrent();
+
+		//Update the board
+		setActive();
+
+		//Get the total number of lines deleted
+		int lineCleared = checkAndDelete();
+
+		//Update score
+		switch (lineCleared)
+		{
+			case 1:
+				score += 40 * level;
+			case 2:
+				score += 100 * level;
+			case 3:
+				score += 300 * level;
+			case 4:
+				score += 1200 * level;
+			default:
+				return;
+		}
+
+		lines += lineCleared;
 	}
 
 	//render the board to GUI
