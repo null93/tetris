@@ -45,17 +45,13 @@ public class Board
 	 */
 	static boolean skipLoop;
 
-<<<<<<< HEAD
-	double delay;
-=======
 	/**
 	 * This data member bookkeeps the delay, on which we sleep the thread until
 	 * we update the board and gameplay.
 	 * @var 	int 			delay 		The current delay until we update
 	 * @static
 	 */
-	static int delay;
->>>>>>> bbb44349a9de28cf1282a08f14949779c8bde030
+	static double delay;
 
 	/**
 	 * This data member bookkeeps the current score, that is scored by the player,
@@ -465,7 +461,6 @@ public class Board
 		{
 			case 1:
 				score += 40 * level;
-<<<<<<< HEAD
 				lines += lineCleared;
 			case 2:
 				score += 100 * level;
@@ -479,24 +474,6 @@ public class Board
 			default:  
 				return;
 		}
-=======
-				break;
-			case 2:
-				score += 100 * level;
-				break;
-			case 3:
-				score += 300 * level;
-				break;
-			case 4:
-				score += 1200 * level;
-				break;
-			default:
-				return;
-		}
-
-		//Update total number of lines cleared
-		lines += lineCleared;
->>>>>>> bbb44349a9de28cf1282a08f14949779c8bde030
 	}
 
 	/**
@@ -528,27 +505,18 @@ public class Board
 
 			newBoard.add(new Cell(temp.type, temp.row + 1, temp.column + 1));
 		}
-<<<<<<< HEAD
-
-
-=======
->>>>>>> bbb44349a9de28cf1282a08f14949779c8bde030
 		return newBoard;
 	}
 
-	//Operate end game
-<<<<<<< HEAD
-	boolean gameOver()
-	{
-		return false;
-=======
 	/**
 	 * This function operates when the game is over, when a tetromino that got spawn
 	 * has overlapped.
 	 * @return  		void
 	 */
-	void gameOver()
+	//Operate end game
+	boolean gameOver()
 	{
->>>>>>> bbb44349a9de28cf1282a08f14949779c8bde030
+		return false;
 	}
+
 }
