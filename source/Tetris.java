@@ -97,7 +97,6 @@ public class Tetris {
 		GameLoop gameLoop = new GameLoop();
 		Thread thread = new Thread(gameLoop);
 		thread.start();
-
 		/**
 		 * Function that need to be integrated with the logical classes are as follows.  Side note:
 		 * Please look through the functions in GUI.java in order to understand which tools are

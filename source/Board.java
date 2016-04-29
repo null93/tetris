@@ -101,6 +101,8 @@ public class Board
 	 */
 	boolean[][] isActive;
 
+	boolean isGameOver;
+
 	/* This is a constructor for the board, it will need the dimension of row by column. */
 	public Board(double r, double c)
 	{
@@ -188,6 +190,8 @@ public class Board
 
 		for(Cell cell : current.pieces)
 			board.add(cell);
+
+		isGameOver = false;
 	}
 
 	/**
@@ -427,6 +431,11 @@ public class Board
 	 */
 	void setCurrent()
 	{
+
+		if(isGameOver)
+		{
+			return;
+		}
 		//Set the current piece down
 		for (int i = 0; i < current.pieces.size(); i++)
 		{
@@ -464,6 +473,34 @@ public class Board
 				break;
 			default:
 				System.out.println("ERROR: randomization has failed with value: " + i);
+		}
+
+		int max = 0;
+		for(Cell cell : next.pieces)
+		{
+			int j = 0;
+			int row = (int)cell.row;
+			//int column = (int)cell.column;
+			while(row < rows && isActive[row][(int)cell.column])
+			{
+				row++;
+				j++;
+			}
+			if(j > max)
+				max = j;
+		}
+
+		System.out.println("MAX " + max);
+
+		if(max != 0)
+		{
+			isGameOver = true;
+			for(int k = 0; k < next.pieces.size(); k++)
+			{
+				next.pieces.get(k).row += max;
+				if(next.pieces.get(k).row >= rows)
+					next.pieces.remove(k);
+			}
 		}
 	}
 
