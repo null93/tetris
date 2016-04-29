@@ -258,7 +258,7 @@ public class Board
 			for (int j = 0; j < board.size(); j++)
 			{
 				//Out of boundaries
-				if ((current.pieces.get(i).column + 1) > columns - 1)
+				if ((current.pieces.get(i).column + 1) >= columns)
 					return false;
 
 				//A current cell exist there																							//May be needed for deleted cell
@@ -280,13 +280,13 @@ public class Board
 	void setActive()
 	{
 		//Reset the board 
-		for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < columns; j++)
-			{
-				isActive[i][j] = false;
-			}
-		}
+		// for (int i = 0; i < rows; i++)
+		// {
+		// 	for (int j = 0; j < columns; j++)
+		// 	{
+		// 		isActive[i][j] = false;
+		// 	}
+		// }
 
 		//Turn on all active pieces
 		for (int i = 0; i < board.size(); i++)
@@ -295,6 +295,7 @@ public class Board
 			int c = (int) board.get(i).column;
 
 			isActive[r][c] = true;
+			System.out.println("Set active at: " + r + " " + c);
 		}
 	}
 
@@ -402,7 +403,7 @@ public class Board
 		for (int i = 0; i < current.pieces.size(); i++)
 		{
 			board.add(current.pieces.get(i));
-			current.pieces.remove(i);				//Unnecessary step maybe?
+			//current.pieces.remove(i);				//Unnecessary step maybe?
 		}
 
 		current = next;
@@ -462,15 +463,19 @@ public class Board
 			case 1:
 				score += 40 * level;
 				lines += lineCleared;
+				break;
 			case 2:
 				score += 100 * level;
 				lines += lineCleared;
+				break;
 			case 3:
 				score += 300 * level;
 				lines += lineCleared;
+				break;
 			case 4:
 				score += 1200 * level;
 				lines += lineCleared;
+				break;
 			default:  
 				return;
 		}
@@ -498,12 +503,32 @@ public class Board
 			}
 		}
 
+		for(Cell cell : current.pieces)
+		{
+
+			if(cell.column < 0)
+			{
+				for(Cell x : current.pieces)
+					x.column++;
+			}
+			else if(cell.column > columns - 1)
+			{
+				for(Cell x : current.pieces)
+					x.column--;
+			}
+			if(cell.row < 0)
+			{
+				for(Cell x : current.pieces)
+					x.row++;
+			}
+		}
+
 		//Add the current piece
 		for (int i = 0; i < current.pieces.size(); i++)
 		{
 			Cell temp = current.pieces.get(i);
 
-			newBoard.add(new Cell(temp.type, temp.row + 1, temp.column + 1));
+			newBoard.add(new Cell(temp.type, temp.row, temp.column));
 		}
 		return newBoard;
 	}

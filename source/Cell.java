@@ -66,8 +66,8 @@ public class Cell {
 		label.setBackground ( Shape.color ( cell.type ) );
 		label.setBorder ( new MatteBorder ( 5, 5, 5, 5, Shape.border ( cell.type ) ) );
 		label.setBounds (
-			( int ) ( 25 * ( cell.column - 1 ) ),
-			( int ) ( 25 * ( 20 - cell.row ) ),
+			( int ) ( 25 * ( cell.column) ),
+			( int ) ( 25 * ( 19 - cell.row ) ),
 			25, 25
 		);
 		// Return the label

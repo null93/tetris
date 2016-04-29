@@ -148,7 +148,6 @@ public class Tetromino
 			c = -1;
 		}
 
-
 		for(Cell cell : pieces)
 		{
 			// Getting a vector relative to the pivot

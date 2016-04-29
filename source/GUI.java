@@ -196,6 +196,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 */
 	protected void renderBoard ( ) {
 		// Forward back to the game panel
+
 		this.gamePanel.render ( this.board.render() );
 	}
 
@@ -338,7 +339,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		//
 		//
 		if(!this.board.moveDown())
-			this.board.setCurrent();
+			this.board.update();
 		this.renderNext(this.board.next.pieces.get(1).type);
 		this.renderBoard();
 	}
