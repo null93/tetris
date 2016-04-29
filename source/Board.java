@@ -68,8 +68,6 @@ public class Board
 	 * @static
 	 */
 	static int lines;
-	
-
 
 	/**
 	 * This data member holds the current tetromino being operated on.
@@ -100,6 +98,8 @@ public class Board
 	 * @var			boolean[][]			Contains all the flags for each piece on the grid
 	 */
 	boolean[][] isActive;
+
+	TimerThread timer;
 
 	/* This is a constructor for the board, it will need the dimension of row by column. */
 	public Board(double r, double c)
@@ -188,6 +188,8 @@ public class Board
 
 		for(Cell cell : current.pieces)
 			board.add(cell);
+
+
 	}
 
 	/**
@@ -308,7 +310,7 @@ public class Board
 			int c = (int) board.get(i).column;
 
 			isActive[r][c] = true;
-			System.out.println("Set active at: " + r + " " + c);
+			//System.out.println("Set active at: " + r + " " + c);
 		}
 	}
 
@@ -414,8 +416,9 @@ public class Board
 		//Make the last row as all false
 		for (int i = 0; i < columns; i++)
 		{
-			isActive[row - 1][i] = false;
+			isActive[(int)rows - 1][i] = false;
 		}
+		setActive();
 	}
 
 	/**
@@ -427,14 +430,18 @@ public class Board
 	 */
 	void setCurrent()
 	{
+
 		//Set the current piece down
 		for (int i = 0; i < current.pieces.size(); i++)
 		{
 			board.add(current.pieces.get(i));
 			//current.pieces.remove(i);				//Unnecessary step maybe?
 		}
+		setActive();
 
 		current = next;
+
+
 
 		Random rand = new Random();
 		//Get next piece ready
@@ -465,6 +472,8 @@ public class Board
 			default:
 				System.out.println("ERROR: randomization has failed with value: " + i);
 		}
+
+		
 	}
 
 	//This function updates the score
@@ -480,8 +489,8 @@ public class Board
 		setCurrent();
 
 		//Update the board
-		setActive();
-		printBoard();
+		//setActive();
+		//printBoard();
 
 		//Get the total number of lines deleted
 		int lineCleared = checkAndDelete();
@@ -491,23 +500,30 @@ public class Board
 		{
 			case 1:
 				score += 40 * level;
+				System.out.println("Score " + score);
 				lines += lineCleared;
 				break;
 			case 2:
 				score += 100 * level;
+				System.out.println("Score " + score);
 				lines += lineCleared;
 				break;
 			case 3:
 				score += 300 * level;
+				System.out.println("Score " + score);
 				lines += lineCleared;
 				break;
 			case 4:
 				score += 1200 * level;
+				System.out.println("Score " + score);
 				lines += lineCleared;
 				break;
 			default:  
 				return;
 		}
+		level = lines / 10 + 1;
+		delay = ((50.0 - ((double) level * 2.0)) / 60.0) * 1000.0;
+		//setActive();
 	}
 
 	/**
@@ -570,7 +586,15 @@ public class Board
 	//Operate end game
 	boolean gameOver()
 	{
+		for (Cell piece : current.pieces)
+		{
+			int r = (int)piece.row;
+			int c = (int)piece.column;
+			if (isActive[r][c])
+				return true;
+		}
 		return false;
+
 	}
 
 }

@@ -339,8 +339,12 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		//
 		//
 		if(!this.board.moveDown())
+		{
 			this.board.update();
-		this.renderNext(this.board.next.pieces.get(1).type);
+			this.renderNext(this.board.next.pieces.get(1).type);
+			this.updateScore(Board.score);
+		}
+		
 		this.renderBoard();
 	}
 
@@ -354,6 +358,14 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
+		while(this.board.moveDown())
+		{
+			
+		}
+		this.board.update();
+		this.renderNext(this.board.next.pieces.get(1).type);
+		
+		this.renderBoard();
 	}
 
 	/**
@@ -710,13 +722,19 @@ public class GUI extends Display implements ActionListener, KeyListener {
 				// Bind the key press to the handler
 				moveRight ();
 				break;
+			case KeyEvent.VK_X:
+				// Highlight the appropriate button
+				this.controlPanel.rotateRight.setBackground ( new Color ( 0x313333 ) );
+				// Bind the key press to the handler
+				rotateRight ();
+				break;
 			case KeyEvent.VK_UP:
 				// Highlight the appropriate button
 				this.controlPanel.rotateRight.setBackground ( new Color ( 0x313333 ) );
 				// Bind the key press to the handler
 				rotateRight ();
 				break;
-			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_Z:
 				// Highlight the appropriate button
 				this.controlPanel.rotateLeft.setBackground ( new Color ( 0x313333 ) );
 				// Bind the key press to the handler
@@ -734,7 +752,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 				// Bind the key press to the handler
 				gravity ();
 				break;
-			case KeyEvent.VK_D:
+			case KeyEvent.VK_SPACE:
 				// Highlight the appropriate button
 				this.controlPanel.hardDrop.setBackground ( new Color ( 0x313333 ) );
 				// Bind the key press to the handler
@@ -766,7 +784,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 				// Bind the key press to the handler
 				quit ();
 				break;
-			case KeyEvent.VK_SPACE:
+			case KeyEvent.VK_DOWN:
 				// Highlight the appropriate button
 				this.controlPanel.softDrop.setBackground ( new Color ( 0x313333 ) );
 				// Bind the key press to the handler

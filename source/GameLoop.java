@@ -5,6 +5,7 @@ class GameLoop implements Runnable {
     public GameLoop ( ) {
         gui = new GUI();
         thread = new Thread();
+
     }
 
     public void run () {
@@ -12,14 +13,19 @@ class GameLoop implements Runnable {
         gui.renderNext(gui.board.next.pieces.get(1).type);
         gui.render();
         gui.renderBoard();
+
         while ( !gui.board.gameOver () ) {
-            
+            gui.board.printBoard();
+            gui.updateScore(Board.score);
+            gui.updateLines(Board.lines);
+            gui.updateLevel(Board.level);
             //gui.renderNext(gui.board.next.pieces.get(1).type);
             //gui.renderNext(board.setCurrent());
             if ( !gui.board.skipLoop ) {
                 if(!gui.board.moveDown())
                 {
                     gui.board.update();
+
                     //gui.board.setCurrent();
                 }
                 gui.render();
