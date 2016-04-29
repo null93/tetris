@@ -207,8 +207,13 @@ public class Board
 				if ((current.pieces.get(i).row - 1) < 0)
 					return false;
 
-				//A current cell exist there																							//May be needed for deleted cell
-				if ((board.get(i).row == current.pieces.get(i).row - 1) && (board.get(i).column == current.pieces.get(i).column))		// && (board.get(i).type == Shape.E))
+				// //A current cell exist there																							//May be needed for deleted cell
+				// if ((board.get(i).row == current.pieces.get(i).row - 1) && (board.get(i).column == current.pieces.get(i).column))		// && (board.get(i).type == Shape.E))
+				// 	return false;
+
+				double r = current.pieces.get(i).row - 1;
+				double c = current.pieces.get(i).column;
+				if (isActive[(int)r][(int)c])
 					return false;
 			}
 		}
@@ -235,7 +240,11 @@ public class Board
 					return false;
 
 				//A current cell exist there																							//May be needed for deleted cell
-				if ((board.get(i).row == current.pieces.get(i).row) && (board.get(i).column == current.pieces.get(i).column - 1))		// && (board.get(i).type == Shape.E))
+				// if ((board.get(i).row == current.pieces.get(i).row) && (board.get(i).column == current.pieces.get(i).column - 1))		// && (board.get(i).type == Shape.E))
+				// 	return false;
+				double r = current.pieces.get(i).row;
+				double c = current.pieces.get(i).column - 1;
+				if (isActive[(int)r][(int)c])
 					return false;
 			}
 		}
@@ -262,7 +271,11 @@ public class Board
 					return false;
 
 				//A current cell exist there																							//May be needed for deleted cell
-				if ((board.get(i).row == current.pieces.get(i).row) && (board.get(i).column == current.pieces.get(i).column + 1))		// && (board.get(i).type == Shape.E))
+				// if ((board.get(i).row == current.pieces.get(i).row) && (board.get(i).column == current.pieces.get(i).column + 1))		// && (board.get(i).type == Shape.E))
+				// 	return false;
+				double r = current.pieces.get(i).row;
+				double c = current.pieces.get(i).column + 1;
+				if (isActive[(int)r][(int)c])
 					return false;
 			}
 		}
@@ -280,13 +293,13 @@ public class Board
 	void setActive()
 	{
 		//Reset the board 
-		// for (int i = 0; i < rows; i++)
-		// {
-		// 	for (int j = 0; j < columns; j++)
-		// 	{
-		// 		isActive[i][j] = false;
-		// 	}
-		// }
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < columns; j++)
+			{
+				isActive[i][j] = false;
+			}
+		}
 
 		//Turn on all active pieces
 		for (int i = 0; i < board.size(); i++)
@@ -333,6 +346,21 @@ public class Board
 
 		}
 		return linesCleared;
+	}
+
+	void printBoard()
+	{
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < columns; j++)
+			{
+				if (isActive[i][j])
+					System.out.print("x");
+				else
+					System.out.print("-");
+			}
+			System.out.println("");
+		}
 	}
 
 	/**
@@ -453,6 +481,7 @@ public class Board
 
 		//Update the board
 		setActive();
+		printBoard();
 
 		//Get the total number of lines deleted
 		int lineCleared = checkAndDelete();
