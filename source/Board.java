@@ -312,7 +312,7 @@ public class Board
 			int c = (int) board.get(i).column;
 
 			isActive[r][c] = true;
-			System.out.println("Set active at: " + r + " " + c);
+			//System.out.println("Set active at: " + r + " " + c);
 		}
 	}
 
@@ -347,6 +347,7 @@ public class Board
 				//Recheck that line
 				i--;
 			}
+			setActive();
 
 		}
 		return linesCleared;
@@ -418,8 +419,9 @@ public class Board
 		//Make the last row as all false
 		for (int i = 0; i < columns; i++)
 		{
-			isActive[row - 1][i] = false;
+			isActive[(int)rows - 1][i] = false;
 		}
+		setActive();
 	}
 
 	/**
@@ -442,6 +444,7 @@ public class Board
 			board.add(current.pieces.get(i));
 			//current.pieces.remove(i);				//Unnecessary step maybe?
 		}
+		setActive();
 
 		current = next;
 
@@ -517,8 +520,8 @@ public class Board
 		setCurrent();
 
 		//Update the board
-		setActive();
-		printBoard();
+		//setActive();
+		//printBoard();
 
 		//Get the total number of lines deleted
 		int lineCleared = checkAndDelete();
@@ -545,6 +548,8 @@ public class Board
 			default:  
 				return;
 		}
+		level = lines / 10 + 1;
+ 		delay = ((50.0 - ((double) level * 2.0)) / 60.0) * 1000.0;
 	}
 
 	/**
