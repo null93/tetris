@@ -13,7 +13,10 @@ class GameLoop implements Runnable {
         gui.render();
         gui.renderBoard();
         while ( !gui.board.isGameOver) {
-            
+            gui.board.printBoard();
+            gui.updateScore(Board.score);
+            gui.updateLines(Board.lines);
+            gui.updateLevel(Board.level);
             //gui.renderNext(gui.board.next.pieces.get(1).type);
             //gui.renderNext(board.setCurrent());
             if ( !gui.board.skipLoop ) {
