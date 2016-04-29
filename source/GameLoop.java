@@ -17,8 +17,13 @@ class GameLoop implements Runnable {
             //gui.renderNext(gui.board.next.pieces.get(1).type);
             //gui.renderNext(board.setCurrent());
             if ( !gui.board.skipLoop ) {
-                //if(!gui.board.moveDown())
-                //  gui.board.setCurrent();
+                if(!gui.board.moveDown())
+                {
+                    gui.board.update();
+                    //gui.board.setCurrent();
+                }
+                gui.render();
+                gui.renderBoard();
             }
             gui.board.skipLoop = false;
             
