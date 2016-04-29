@@ -12,7 +12,7 @@ class GameLoop implements Runnable {
         gui.renderNext(gui.board.next.pieces.get(1).type);
         gui.render();
         gui.renderBoard();
-        while ( !gui.board.gameOver () ) {
+        while ( !gui.board.isGameOver) {
             
             //gui.renderNext(gui.board.next.pieces.get(1).type);
             //gui.renderNext(board.setCurrent());
@@ -38,6 +38,20 @@ class GameLoop implements Runnable {
     
             //while ( board.pause ) {}
         }
+        // gui.board = new Board(20, 10);
+        // gui.render();
+        // try
+        // {
+        //     thread.sleep(3000);
+        // }
+        // catch(Exception e)
+        // {
+        //     e.printStackTrace();
+        // }
+
+        gui.restart();
+        System.out.println("Game Over!");
+        run();
        // board.finshedGame ();
     }
 
