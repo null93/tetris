@@ -64,7 +64,9 @@ public class GUI extends Display implements ActionListener, KeyListener {
 
 	protected Board board;
 
-	private HighscoresManager highscoresManager;
+	protected HighscoresManager highscoresManager;
+
+	protected boolean pause;
 
 	/**
 	 * This constructor creates all the main panels and appends it to the main window panel. It also
@@ -80,18 +82,10 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		this.displayPanel = new DisplayPanel ();
 		this.controlPanel = new ControlPanel ();
 		this.board = new Board(20, 10);
-		System.out.println("IN GUI delay: " + this.board.delay);
+		//System.out.println("IN GUI delay: " + this.board.delay);
 		this.highscoresManager = new HighscoresManager();
 
-		/* Temporary test code for highscores */
-
-        highscoresManager.addPlayer("Ben", 1000);
-        highscoresManager.addPlayer("Raf", 2000);
-        highscoresManager.addPlayer("Paul", 3000);
-        highscoresManager.addPlayer("raf", 3000);
-        highscoresManager.addPlayer("Ben", 1000);
-
-		/* End of test code for highscores */
+		this.pause = false;
 
 		// Add all the elements into the main panel
 		super.panel.add ( this.gamePanel );
@@ -278,7 +272,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 * @return  void
 	 */
 	protected void moveLeft () {
-		System.out.println ( "MOVE LEFT!" );
+		//System.out.println ( "MOVE LEFT!" );
 		// Run the appropriate handler from the logic class
 		//
 		//
@@ -292,7 +286,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 * @return  void
 	 */
 	protected void moveRight () {
-		System.out.println ( "MOVE RIGHT!" );
+		//System.out.println ( "MOVE RIGHT!" );
 		// Run the appropriate handler from the logic class
 		//
 		//
@@ -306,7 +300,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 * @return  void
 	 */
 	protected void rotateLeft () {
-		System.out.println ( "ROTATE LEFT!" );
+		//System.out.println ( "ROTATE LEFT!" );
 		// Run the appropriate handler from the logic class
 		//
 		//
@@ -320,7 +314,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 * @return  void
 	 */
 	protected void rotateRight () {
-		System.out.println ( "ROTATE RIGHT!" );
+		//System.out.println ( "ROTATE RIGHT!" );
 		// Run the appropriate handler from the logic class
 		//
 		//
@@ -334,11 +328,11 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 * @return  void
 	 */
 	protected void softDrop () {
-		System.out.println ( "SOFT DROP!" );
+		//System.out.println ( "SOFT DROP!" );
 		// Run the appropriate handler from the logic class
 		//
 		//
-		if(!this.board.moveDown())
+		if(!this.board.moveDown() && !this.board.isGameOver)
 		{
 			this.board.update();
 			this.renderNext(this.board.next.pieces.get(1).type);
@@ -352,11 +346,11 @@ public class GUI extends Display implements ActionListener, KeyListener {
 	 * @return  void
 	 */
 	protected void hardDrop () {
-		System.out.println ( "HARD DROP!" );
+		//System.out.println ( "HARD DROP!" );
 		// Run the appropriate handler from the logic class
 		//
 		//
-		while(this.board.moveDown())
+		while(this.board.moveDown() && !this.board.isGameOver)
 		{
 			
 		}
@@ -377,6 +371,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// If the text is pause, change to play
 		if ( current.equals ( "Pause" ) ) {
 			// Change the text value
+			pause = true;
 			this.controlPanel.pause.setText ( "Play" );
 			// Run the appropriate handler from the logic class
 			//
@@ -384,6 +379,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		}
 		// Otherwise do the opposite
 		else {
+			pause = false;
 			// Change the text value
 			this.controlPanel.pause.setText ( "Pause" );
 			// Run the appropriate handler from the logic class
@@ -753,7 +749,6 @@ public class GUI extends Display implements ActionListener, KeyListener {
 				// Highlight the appropriate button
 				this.controlPanel.hardDrop.setBackground ( new Color ( 0x313333 ) );
 				// Bind the key press to the handler
-				hardDrop ();
 				break;
 			case KeyEvent.VK_M:
 				// Highlight the appropriate button
@@ -837,6 +832,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 			case KeyEvent.VK_SPACE:
 				// Highlight the appropriate button
 				this.controlPanel.softDrop.setBackground ( new Color ( 0x242626 ) );
+				hardDrop ();
 				break;
 		}
 	}
