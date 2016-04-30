@@ -91,6 +91,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		super.panel.add ( this.gamePanel );
 		super.panel.add ( this.displayPanel );
 		super.panel.add ( this.controlPanel );
+		
 		// Add the buttons to the action listener
 		this.controlPanel.moveLeft.addActionListener ( this );
 		this.controlPanel.moveRight.addActionListener ( this );
@@ -101,6 +102,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		this.controlPanel.gravity.addActionListener ( this );
 		this.controlPanel.pause.addActionListener ( this );
 		this.controlPanel.music.addActionListener ( this );
+
 		// Add to itself as a key listener and set focus properties
 		super.addKeyListener ( this );
 		super.setFocusable ( true );
@@ -276,8 +278,11 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
-		this.board.moveLeft();
-		this.renderBoard();
+		if(!this.board.isGameOver && !this.pause)
+		{
+			this.board.moveLeft();
+			this.renderBoard();
+		}
 	}
 
 	/**
@@ -290,8 +295,11 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
-		this.board.moveRight();
-		this.renderBoard();
+		if(!this.board.isGameOver && !this.pause)
+		{
+			this.board.moveRight();
+			this.renderBoard();
+		}
 	}
 
 	/**
@@ -304,8 +312,11 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
-		this.board.current.rotate(Tetromino.Rotation.LEFT);
-		this.renderBoard();
+		if(!this.board.isGameOver && !this.pause)
+		{
+			this.board.current.rotate(Tetromino.Rotation.LEFT);
+			this.renderBoard();
+		}
 	}
 
 	/**
@@ -318,8 +329,11 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
-		this.board.current.rotate(Tetromino.Rotation.RIGHT);
-		this.renderBoard();
+		if(!this.board.isGameOver && !this.pause)
+		{
+			this.board.current.rotate(Tetromino.Rotation.RIGHT);
+			this.renderBoard();
+		}
 	}
 
 	/**
@@ -332,12 +346,15 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
-		if(!this.board.moveDown() && !this.board.isGameOver)
+		if(!this.board.isGameOver && !this.pause)
 		{
-			this.board.update();
-			this.renderNext(this.board.next.pieces.get(1).type);
+			if(!this.board.moveDown())
+			{
+				this.board.update(getGravity());
+				this.renderNext(this.board.next.pieces.get(0).type);
+			}
+			this.renderBoard();
 		}
-		this.renderBoard();
 	}
 
 	/**
@@ -350,13 +367,16 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		// Run the appropriate handler from the logic class
 		//
 		//
-		while(this.board.moveDown() && !this.board.isGameOver)
+		if(!this.board.isGameOver && !this.pause)
 		{
-			
+			while(this.board.moveDown())
+			{
+				
+			}
+			this.board.update(getGravity());
+			this.renderNext(this.board.next.pieces.get(1).type);
+			this.renderBoard();
 		}
-		this.board.update();
-		this.renderNext(this.board.next.pieces.get(1).type);
-		this.renderBoard();
 	}
 
 	/**
@@ -376,6 +396,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 			// Run the appropriate handler from the logic class
 			//
 			//
+			// super.setFocusable(false);
+			// this.controlPanel.setFocusable(false);
 		}
 		// Otherwise do the opposite
 		else {
@@ -385,6 +407,8 @@ public class GUI extends Display implements ActionListener, KeyListener {
 			// Run the appropriate handler from the logic class
 			//
 			//
+			// super.setFocusable(true);
+			// this.controlPanel.setFocusable(true);
 		}
 	}
 
@@ -593,10 +617,10 @@ public class GUI extends Display implements ActionListener, KeyListener {
 								"<u>Keyboard Shortcuts</u>:<br><br>" +
 								"<pre><b>Left Arrow</b>:\t\tMove piece left</pre>" +
 								"<pre><b>Right Arrow</b>:\t\tMove piece right</pre>" +
-								"<pre><b>Up Arrow</b>:\t\tRotate clockwise</pre>" +
-								"<pre><b>Down Arrow</b>:\t\tRotate counter clockwise</pre>" +
-								"<pre><b>Space</b>:\t\tSoft drop</pre>" +
-								"<pre><b>D</b>:\t\thard drop</pre>" +
+								"<pre><b>Up Arrow or X</b>:\t\tRotate clockwise</pre>" +
+								"<pre><b>Z</b>:\t\tRotate counter clockwise</pre>" +
+								"<pre><b>Down Arrow</b>:\t\tSoft drop</pre>" +
+								"<pre><b>Space</b>:\t\tHard drop</pre>" +
 								"<pre><b>G</b>:\t\tToggle gravity setting</pre>" +
 								"<pre><b>P</b>:\t\tToggle pausing game</pre>" +
 								"<pre><b>M</b>:\t\tToggle music</pre>" +

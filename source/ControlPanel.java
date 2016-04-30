@@ -105,14 +105,23 @@ class ControlPanel extends JPanel {
 		this.nextPiece.setBounds ( 0, 0, 175, 105 );
 		// Create all the buttons
 		this.moveLeft = createButton ( "./assets/images/Left.png", 75, 40, 0, 133 );
+		this.moveLeft.setFocusable(false);
 		this.moveRight = createButton ( "./assets/images/Right.png", 75, 40, 100, 133 );
+		this.moveRight.setFocusable(false);
 		this.rotateLeft = createButton ( "./assets/images/Counter-Clockwise.png", 75, 40, 0, 198 );
+		this.rotateLeft.setFocusable(false);
 		this.rotateRight = createButton ( "./assets/images/Clockwise.png", 75, 40, 100, 198 );
+		this.rotateRight.setFocusable(false);
 		this.softDrop = createButton ( "Soft Drop", 175, 40, 0, 265 );
+		this.softDrop.setFocusable(false);
 		this.hardDrop = createButton ( "Hard Drop", 175, 40, 0, 330 );
+		this.hardDrop.setFocusable(false);
 		this.gravity = createButton ( "Naive Gravity", 175, 40, 0, 395 );
+		this.gravity.setFocusable(false);
 		this.pause = createButton ( "Pause", 75, 40, 0, 460 );
+		this.pause.setFocusable(false);
 		this.music = createButton ( "Mute", 75, 40, 100, 460 );
+		this.music.setFocusable(false);
 		// Set a smaller font for these buttons
 		this.pause.setFont ( new Font ( "Muli", Font.PLAIN, 10 ) );
 		this.music.setFont ( new Font ( "Muli", Font.PLAIN, 10 ) );

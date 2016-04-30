@@ -15,7 +15,6 @@ class GameTimer implements Runnable {
 
     public synchronized void run () 
     {
-        System.out.println("BLEH");
         while(!Board.isGameOver)
         {
             if(!gui.pause)

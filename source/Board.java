@@ -70,6 +70,8 @@ public class Board
 	 */
 	int lines;
 	
+
+	// 
 	boolean collisionFlag;
 
 	/**
@@ -479,7 +481,7 @@ public class Board
 		printBoard();
 	}
 
-int checkAndDeleteFlood()
+	int checkAndDeleteFlood()
 	{
 		int linesCleared = 0;
 
@@ -499,6 +501,7 @@ int checkAndDeleteFlood()
 			{
 				linesCleared++;
 				deleteRow(i);
+
 				if (i == 0)
 					pack(i);
 				else
@@ -652,7 +655,7 @@ int checkAndDeleteFlood()
 	 * we update the score and total number of lines cleared.
 	 * @return 		void
 	 */
-	void update()
+	void update(boolean naiveGravity)
 	{
 		//Set the current piece down
 		setCurrent();
@@ -661,7 +664,11 @@ int checkAndDeleteFlood()
 		printBoard();
 
 		//Get the total number of lines deleted
-		int lineCleared = checkAndDeleteFlood();
+		int lineCleared;
+		if(naiveGravity)
+			lineCleared = checkAndDelete();
+		else
+			lineCleared = checkAndDeleteFlood();
 
 		//Update score
 		switch (lineCleared)
@@ -741,6 +748,8 @@ int checkAndDeleteFlood()
 
 			newBoard.add(new Cell(temp.type, temp.row, temp.column));
 		}
+
+		Shadow.shadow(this.current.pieces, newBoard, isActive);
 		return newBoard;
 	}
 

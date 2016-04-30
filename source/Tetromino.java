@@ -173,4 +173,8 @@ public class Tetromino
 		pivotCell = pieces.get(1);
 	}
 
+	ArrayList<Cell> getPieces()
+	{
+		return this.pieces;
+	}
 }
