@@ -18,7 +18,7 @@ public enum Shape {
 
 	// Define all the types of Tetris shapes
 	// E for empty
-	I, T, O, L, J, S, Z;
+	I, T, O, L, J, S, Z, Default;
 
 	/**
 	 * Define a static function that will return the color associated with that shape type.  It will
@@ -45,7 +45,7 @@ public enum Shape {
 			case Z:
 				return new Color ( 0x427C7C );
 			default:
-				return Color.WHITE;
+				return new Color ( 0x1D1F1F );
 		}
 	}
 

@@ -1,4 +1,8 @@
 import javax.swing.JOptionPane;
+import javax.swing.JFrame;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 class GameLoop implements Runnable {
     
     protected GUI gui;
@@ -18,77 +22,19 @@ class GameLoop implements Runnable {
 
     public synchronized void run () 
     {
-    //     gui.renderNext(gui.board.next.pieces.get(1).type);
-    //     gui.render();
-    //     gui.renderBoard();
-    //     while ( !gui.board.isGameOver) {
-    //         gui.board.printBoard();
-    //         gui.updateScore(Board.score);
-    //         gui.updateLines(Board.lines);
-    //         gui.updateLevel(Board.level);
-    //         //gui.renderNext(gui.board.next.pieces.get(1).type);
-    //         //gui.renderNext(board.setCurrent());
-    //         if ( !gui.board.skipLoop ) {
-    //             if(!gui.board.moveDown())
-    //             {
-    //                 gui.board.update();
-    //                 //gui.board.setCurrent();
-    //                 gui.renderNext(gui.board.next.pieces.get(1).type);
-    //             }
-    //             gui.render();
-    //             gui.renderBoard();
-    //         }
-    //         gui.board.skipLoop = false;
-            
-    //         try
-    //         {
-    //             thread.sleep((long)gui.board.delay);
-    //             //thread.sleep(3000);
-    //         }
-    //         catch(Exception e)
-    //         {
-    //             e.printStackTrace();
-    //         }
-    
-    //         //while ( board.pause ) {}
-    //     }
-    //     // gui.board = new Board(20, 10);
-    //     // gui.render();
-    //     // try
-    //     // {
-    //     //     thread.sleep(3000);
-    //     // }
-    //     // catch(Exception e)
-    //     // {
-    //     //     e.printStackTrace();
-    //     // }
-    //     timer.seconds = 0;
-    //     gui.board.isGameOver = false;
-    //     gui.restart();
-    //     try
-    //     {
-    //         thread.sleep(3000);
-    //     }
-    //     catch(Exception e)
-    //     {
-    //         e.printStackTrace();
-    //     }
-    //     System.out.println("Game Over!");
-    //     run();
-    //    // board.finshedGame ();
-    // }
-
         while(true)
         {
             while(!gui.board.isGameOver)
             {
                 // DEBUG - printing isActive
                // gui.board.printBoard();
+                while ( gui.pause ) 
+                { 
+                    System.out.println("Paused"); 
+                }
 
                 // Render the board
                 gui.renderBoard();
-
-               
 
                 // Update Display Panel
                 gui.updateScore(gui.board.score);
@@ -96,13 +42,11 @@ class GameLoop implements Runnable {
                 gui.updateLevel(gui.board.level);
                 if(!gui.board.moveDown())
                 {
-                    gui.board.update();
+                    gui.board.update(gui.getGravity());
                     // Render the next piece
                     //if(gui.board.next.pieces.size() != 0)
-                        gui.renderNext(gui.board.next.pieces.get(0).type);
+                    gui.renderNext(gui.board.next.pieces.get(0).type);
                 }
-
-                while ( gui.pause ) { System.out.println(gui.pause);}
 
                 // Gravity - delay
                 try
@@ -119,24 +63,52 @@ class GameLoop implements Runnable {
             System.out.println("Game Over!");
             String name = JOptionPane.showInputDialog(null, "Enter your name: ");
 
-            gui.highscoresManager.addPlayer(name, gui.board.score);
-
-            //JOptionPane.showMessageDialog(null, )
-            gui.restart();
-            try
+            if(name != null)
             {
-                thread.sleep(3000);
+                name = name.replaceAll("\\s+", "");
+                gui.highscoresManager.addPlayer(name, gui.board.score);
             }
-            catch(Exception e)
+
+            int reply = JOptionPane.showConfirmDialog(null, "Would you like to play again?", 
+                "Restart the game?",
+                JOptionPane.YES_NO_OPTION);
+
+            if(reply == JOptionPane.YES_OPTION)
             {
-                e.printStackTrace();
-            }
-            
-            Board.isGameOver = false;
+                JFrame message = new JFrame();
+                JOptionPane pane = new JOptionPane("Great! Starting a new game in 3 seconds!", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
+                message.setContentPane(pane);
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                message.setLocation(dim.width / 2 - message.getSize().width / 2, 
+                    dim.height / 2 - message.getSize().height / 2);
+                message.setVisible(true);
+                message.pack();
+                message.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                
+                try
+                {
+                    thread.sleep(3000);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+                message.setVisible(false);
+                message.dispose();
+                
+                gui.restart();
+                Board.isGameOver = false;
 
 
-            timerThread = new Thread(timer);
-            timerThread.start();
+                timerThread = new Thread(timer);
+                timerThread.start();
+            }         
+            else 
+            {
+                gui.dispose();
+                System.exit(0);
+            }  
         }
     }
 
