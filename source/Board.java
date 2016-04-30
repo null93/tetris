@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Iterator;
 
 /**
  * This class acts as the back end of the game. This class will operate all the functions
@@ -36,14 +37,14 @@ public class Board
 	 * @var 	int 			level		The current level
 	 * @static
 	 */
-	static int level;
+	int level;
 
 	/**
 	 * This data member will act as a flag to determine if we skip loop in the thread.
 	 * @var 	boolean 		skipLoop	Set if we skip loop
 	 * @static
 	 */
-	static boolean skipLoop;
+	boolean skipLoop;
 
 	/**
 	 * This data member bookkeeps the delay, on which we sleep the thread until
@@ -51,7 +52,7 @@ public class Board
 	 * @var 	int 			delay 		The current delay until we update
 	 * @static
 	 */
-	static double delay;
+	double delay;
 
 	/**
 	 * This data member bookkeeps the current score, that is scored by the player,
@@ -59,7 +60,7 @@ public class Board
 	 * @var 	int 			score 		Store the current score
 	 * @static
 	 */
-	static int score;
+	int score;
 
 	/**
 	 * This data member bookkeeps the total amount of lines that the user have cleared
@@ -67,9 +68,9 @@ public class Board
 	 * @var 	int 			lines 		Store the current score
 	 * @static
 	 */
-	static int lines;
+	int lines;
 	
-
+	boolean collisionFlag;
 
 	/**
 	 * This data member holds the current tetromino being operated on.
@@ -91,7 +92,7 @@ public class Board
 	 * @var 		ArrayList <Cell>	Contains all the active pieces
 	 * @static		
 	 */
-	static ArrayList <Cell> board;
+	ArrayList <Cell> board;
 
 	/**
 	 * This data member will act as a second instance of board, but this
@@ -101,7 +102,12 @@ public class Board
 	 */
 	boolean[][] isActive;
 
-	boolean isGameOver;
+	/**
+	 * This data member will act as a flag to determine whether the game is over
+	 * game is over on true, false otherwise
+	 * @var			boolean			Flag to determine whether the game is over
+	 */
+	static boolean isGameOver;
 
 	/* This is a constructor for the board, it will need the dimension of row by column. */
 	public Board(double r, double c)
@@ -185,13 +191,11 @@ public class Board
 		board = new ArrayList <Cell>();
 
 		//Used for deletion, set all settle pieces of cell if they are active or not
-		isActive = new boolean[(int) r][(int) c];
-
-
-		for(Cell cell : current.pieces)
-			board.add(cell);
+		isActive = new boolean[(int) r + 10][(int) c];
 
 		isGameOver = false;
+
+		collisionFlag = false;
 	}
 
 	/**
@@ -202,24 +206,24 @@ public class Board
 	boolean moveDown()
 	{
 		//If the current can move down
-		for (int i = 0; i < current.pieces.size(); i++)
+		for (Cell piece : current.pieces)
 		{
-			//Transverse through the board to check
-			for (int j = 0; j < board.size(); j++)
-			{
+			// //Transverse through the board to check
+			// for (Cell cell : board)
+			// {
 				//Out of boundaries
-				if ((current.pieces.get(i).row - 1) < 0)
+				if ((piece.row - 1) < 0)
 					return false;
 
 				// //A current cell exist there																							//May be needed for deleted cell
 				// if ((board.get(i).row == current.pieces.get(i).row - 1) && (board.get(i).column == current.pieces.get(i).column))		// && (board.get(i).type == Shape.E))
 				// 	return false;
 
-				double r = current.pieces.get(i).row - 1;
-				double c = current.pieces.get(i).column;
+				double r = piece.row - 1;
+				double c = piece.column;
 				if (isActive[(int)r][(int)c])
 					return false;
-			}
+			// }
 		}
 
 		//If we arrived here we pass all test and move piece down
@@ -234,23 +238,25 @@ public class Board
 	 */
 	boolean moveLeft()
 	{
-		for (int i = 0; i < current.pieces.size(); i++)
+		//If the current can move down
+		for (Cell piece : current.pieces)
 		{
-			//Transverse through the board to check
-			for (int j = 0; j < board.size(); j++)
-			{
+			// //Transverse through the board to check
+			// for (Cell cell : board)
+			// {
 				//Out of boundaries
-				if ((current.pieces.get(i).column - 1) < 0)
+				if ((piece.column - 1) < 0)
 					return false;
 
-				//A current cell exist there																							//May be needed for deleted cell
-				// if ((board.get(i).row == current.pieces.get(i).row) && (board.get(i).column == current.pieces.get(i).column - 1))		// && (board.get(i).type == Shape.E))
+				// //A current cell exist there																							//May be needed for deleted cell
+				// if ((board.get(i).row == current.pieces.get(i).row - 1) && (board.get(i).column == current.pieces.get(i).column))		// && (board.get(i).type == Shape.E))
 				// 	return false;
-				double r = current.pieces.get(i).row;
-				double c = current.pieces.get(i).column - 1;
+
+				double r = piece.row;
+				double c = piece.column - 1;
 				if (isActive[(int)r][(int)c])
 					return false;
-			}
+			// }
 		}
 
 		//If we arrived here we pass all test and move piece down
@@ -265,23 +271,25 @@ public class Board
 	 */
 	boolean moveRight()
 	{
-		for (int i = 0; i < current.pieces.size(); i++)
+		//If the current can move down
+		for (Cell piece : current.pieces)
 		{
-			//Transverse through the board to check
-			for (int j = 0; j < board.size(); j++)
-			{
+			// //Transverse through the board to check
+			// for (Cell cell : board)
+			// {
 				//Out of boundaries
-				if ((current.pieces.get(i).column + 1) >= columns)
+				if ((piece.column + 1) >= columns)
 					return false;
 
-				//A current cell exist there																							//May be needed for deleted cell
-				// if ((board.get(i).row == current.pieces.get(i).row) && (board.get(i).column == current.pieces.get(i).column + 1))		// && (board.get(i).type == Shape.E))
+				// //A current cell exist there																							//May be needed for deleted cell
+				// if ((board.get(i).row == current.pieces.get(i).row - 1) && (board.get(i).column == current.pieces.get(i).column))		// && (board.get(i).type == Shape.E))
 				// 	return false;
-				double r = current.pieces.get(i).row;
-				double c = current.pieces.get(i).column + 1;
+
+				double r = piece.row;
+				double c = piece.column + 1;
 				if (isActive[(int)r][(int)c])
 					return false;
-			}
+			// }
 		}
 
 		//If we arrived here we pass all test and move piece down
@@ -296,6 +304,7 @@ public class Board
 	 */
 	void setActive()
 	{
+
 		//Reset the board 
 		for (int i = 0; i < rows; i++)
 		{
@@ -306,10 +315,10 @@ public class Board
 		}
 
 		//Turn on all active pieces
-		for (int i = 0; i < board.size(); i++)
+		for (Cell cell : board)
 		{
-			int r = (int) board.get(i).row;
-			int c = (int) board.get(i).column;
+			int r = (int) cell.row;
+			int c = (int) cell.column;
 
 			isActive[r][c] = true;
 			//System.out.println("Set active at: " + r + " " + c);
@@ -326,36 +335,62 @@ public class Board
 	int checkAndDelete()
 	{
 		int linesCleared = 0;
-		for (int i = 0; i < rows; i++)
+		// for (int i = 0; i < rows; i++)
+		// {
+		// 	boolean rowIsFilled = true;
+		// 	for (int j = 0; j < columns; j++)
+		// 	{
+		// 		//If row is not filled move onto next line
+		// 		if (!isActive[i][j])
+		// 			rowIsFilled = false;
+		// 	}
+
+		// 	if (rowIsFilled)
+		// 	{
+		// 		//Update lines cleared for score system
+		// 		linesCleared++;
+		// 		//Delete the rows
+		// 		deleteRow(i);
+		// 		//Now bring everything above it down one, above it
+		// 		pack(i);
+		// 		//Recheck that line
+		// 		i--;
+		// 	}
+		// 	setActive();
+
+		// }
+
+		ArrayList<Integer> rowsToClear = new ArrayList<Integer>();
+
+		for(int i = 0; i < rows; i++)
 		{
 			boolean rowIsFilled = true;
-			for (int j = 0; j < columns; j++)
+			for(int j = 0; j < columns; j++)
 			{
-				//If row is not filled move onto next line
-				if (!isActive[i][j])
+				if(!isActive[i][j])
 					rowIsFilled = false;
 			}
 
-			if (rowIsFilled)
+			if(rowIsFilled)
 			{
-				//Update lines cleared for score system
 				linesCleared++;
-				//Delete the rows
 				deleteRow(i);
-				//Now bring everything above it down one, above it
 				pack(i);
-				//Recheck that line
+				//setActive();
 				i--;
 			}
-			setActive();
-
 		}
+
+		// if(linesCleared > 0)
+		// 	pack(rowsToClear.get(0), linesCleared);
 		return linesCleared;
 	}
 
+	
+
 	void printBoard()
 	{
-		for (int i = 0; i < rows; i++)
+		for (int i = (int) (rows - 1); i >= 0; i--)
 		{
 			for (int j = 0; j < columns; j++)
 			{
@@ -376,16 +411,24 @@ public class Board
 	 */
 	void deleteRow(int row)
 	{
-		for (int i = 0; i < columns; i++)
+		System.out.println("ROW TO DELETE: " + row);
+		System.out.println("	Board size before delete: " + board.size());
+		// for (int i = 0; i < columns; i++)
+		// {
+		// 	isActive[row][i] = false;
+		// }
+		int i, j = 0;
+		for (Iterator<Cell> it = board.iterator(); it.hasNext();)
 		{
-			isActive[row][i] = false;
+			if (it.next().row == row)
+			{
+				it.remove();
+			}
 		}
 
-		for (int i = 0; i < board.size(); i++)
-		{
-			if (board.get(i).row == row)
-				board.remove(i);
-		}
+		setActive();
+		System.out.println("	Board size after delete: " + board.size());
+		printBoard();
 	}
 
 	/**
@@ -403,26 +446,110 @@ public class Board
 			//Replace everything above it with row going down
 			if (board.get(i).row > row)
 			{
-				Cell temp = new Cell(board.get(i).type, (board.get(i).row - 1), board.get(i).column);
-				board.set(i, temp);
+				// Cell temp = new Cell(board.get(i).type, (board.get(i).row - 1), board.get(i).column);
+				// board.set(i, temp);
+				board.get(i).row--;
 			}
 		}
 
-		for (int i = row; i < rows - 1; i++)
+		System.out.println("ROW TO PACK: " + row);
+		// for(Cell cell : board)
+		// {
+		// 	if(cell.row > row)
+		// 	{
+		// 		cell.row--;
+		// 	}
+		// }
+
+		// for (int i = row; i < rows - 1; i++)
+		// {
+		// 	//Update the boolean board
+		// 	for (int j = 0; j < columns; j++)
+		// 	{
+		// 		isActive[i][j] = isActive[i + 1][j];
+		// 	}
+		// }
+		// //Make the last row as all false
+		// for (int i = 0; i < columns; i++)
+		// {
+		// 	isActive[(int)rows - 1][i] = false;
+		// }
+
+		setActive();
+		printBoard();
+	}
+
+int checkAndDeleteFlood()
+	{
+		int linesCleared = 0;
+
+
+		ArrayList<Integer> rowsToClear = new ArrayList<Integer>();
+
+		for(int i = (int)rows - 1; i >= 0; i--)
 		{
-			//Update the boolean board
-			for (int j = 0; j < columns; j++)
+			boolean rowIsFilled = true;
+			for(int j = 0; j < columns; j++)
 			{
-				isActive[i][j] = isActive[i + 1][j];
+				if(!isActive[i][j])
+					rowIsFilled = false;
+			}
+
+			if(rowIsFilled)
+			{
+				linesCleared++;
+				deleteRow(i);
+				if (i == 0)
+					pack(i);
+				else
+					packFlood(i);
+
+				setActive();
+				//Check the line again
+				i++;
 			}
 		}
-		//Make the last row as all false
-		for (int i = 0; i < columns; i++)
+
+		// if(linesCleared > 0)
+		// 	pack(rowsToClear.get(0), linesCleared);
+		return linesCleared;
+	}
+
+	void packFlood(int row)
+	{
+		for (int j = 1; j + row < rows; j++)
+		for (int i = 0; i < board.size(); i++)
 		{
-			isActive[(int)rows - 1][i] = false;
+			// if (board.get(i).row > row && board.get(i).row - 1 > 0)
+			// {
+			// 		while(!isActive[(int)board.get(i).row - 1][(int)board.get(i).column])
+			// 		{
+			// 			board.get(i).row--;
+			// 			setActive();
+			// 			if ((int)board.get(i).row - 1 == 0)
+			// 				break;
+			// 		}
+			// }
+
+			if (board.get(i).row ==  row + j)
+			{
+				int r = (int) board.get(i).row;
+				int c = (int) board.get(i).column;
+				while(r > 0 && !isActive[r - 1][c])
+				{
+					board.get(i).row--;
+					r = (int) board.get(i).row;
+					c = (int) board.get(i).column;
+					setActive();
+				}
+			}
 		}
+
+		System.out.println("ROW TO PACK: " + row);
+	
 		setActive();
 	}
+
 
 	/**
 	 * This function transfer the current tetromino to the board, which only happens
@@ -433,24 +560,44 @@ public class Board
 	 */
 	void setCurrent()
 	{
-
-		if(isGameOver)
-		{
-			return;
-		}
+		int i;
 		//Set the current piece down
-		for (int i = 0; i < current.pieces.size(); i++)
+		for (Cell piece : current.pieces)
 		{
-			board.add(current.pieces.get(i));
+			board.add(piece);
 			//current.pieces.remove(i);				//Unnecessary step maybe?
 		}
 		setActive();
+
+		if (collisionFlag)
+			isGameOver = true;
+
+		while(collisionOnNext())
+		{
+			collisionFlag = true;
+			System.out.println("Collision whiling?");
+			for(Cell cell : next.pieces)
+			{
+				cell.row++;
+			}
+
+			// for(i = next.pieces.size() - 1; i >= 0; i--)
+			// {
+			// 	if(next.pieces.get(i).row >= rows)
+			// 		next.pieces.remove(i);
+			// }
+
+			if (next.pieces.size() == 0)
+				isGameOver = true;
+			
+		}
+
 
 		current = next;
 
 		Random rand = new Random();
 		//Get next piece ready
-		int i = rand.nextInt(7);
+		i = rand.nextInt(7);
 		switch(i)
 		{
 			case 0:
@@ -478,33 +625,24 @@ public class Board
 				System.out.println("ERROR: randomization has failed with value: " + i);
 		}
 
-		int max = 0;
+		
+
+		//setActive();
+	}
+
+	boolean collisionOnNext()
+	{
+		if (next.pieces.size() == 0)
+			return false;
 		for(Cell cell : next.pieces)
 		{
-			int j = 0;
-			int row = (int)cell.row;
-			//int column = (int)cell.column;
-			while(row < rows && isActive[row][(int)cell.column])
-			{
-				row++;
-				j++;
-			}
-			if(j > max)
-				max = j;
-		}
+			int r = (int) cell.row;
+			int c = (int) cell.column;
 
-		System.out.println("MAX " + max);
-
-		if(max != 0)
-		{
-			isGameOver = true;
-			for(int k = 0; k < next.pieces.size(); k++)
-			{
-				next.pieces.get(k).row += max;
-				if(next.pieces.get(k).row >= rows)
-					next.pieces.remove(k);
-			}
+			if(isActive[r][c])
+				return true;
 		}
+		return false;
 	}
 
 	//This function updates the score
@@ -520,11 +658,10 @@ public class Board
 		setCurrent();
 
 		//Update the board
-		//setActive();
-		//printBoard();
+		printBoard();
 
 		//Get the total number of lines deleted
-		int lineCleared = checkAndDelete();
+		int lineCleared = checkAndDeleteFlood();
 
 		//Update score
 		switch (lineCleared)
@@ -549,7 +686,10 @@ public class Board
 				return;
 		}
 		level = lines / 10 + 1;
- 		delay = ((50.0 - ((double) level * 2.0)) / 60.0) * 1000.0;
+		int l = level;
+		if (level > 24)
+			l = 24;
+ 		delay = ((50.0 - ((double) l * 2.0)) / 60.0) * 1000.0;
 	}
 
 	/**
