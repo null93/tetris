@@ -127,7 +127,7 @@ public class Board
 		//delay = (50 - (level x 2)) / 60 seconds
 		delay = ((50.0 - ((double) level * 2.0)) / 60.0) * 1000.0;
 
-		System.out.println("IN BOARD delay: " + delay);
+		//System.out.println("IN BOARD delay: " + delay);
 
 		//Initialize the total number of lines cleared.
 		lines = 0;
@@ -316,7 +316,7 @@ public class Board
 				// 	return false;
 				if(current.pivotCell == null)
 				{
-				System.out.println("NULL")	;
+				//System.out.println("NULL")	;
 				return false;
 
 				}
@@ -338,13 +338,13 @@ public class Board
 
 				if (r < 0 || r >= rows || c < 0 || c >= columns)
 				{
-					//Do nothing and let it push off the wall
+					return false;//Do nothing and let it push off the wall
 				}
 				 //System.out.println("Row:" + r + "Column" + c );
 				 //System.out.println("PIVOT- r: "+ current.pivotCell.row + "c: " + current.pivotCell.column);
 				else if (isActive[(int)r][(int)c])
 				{
-					System.out.println("FAIL")	;
+					//System.out.println("FAIL")	;
 					return false;
 				}
 			// }
@@ -372,7 +372,7 @@ public class Board
 				// 	return false;
 				if(current.pivotCell == null)
 				{
-				System.out.println("NULL")	;
+				//System.out.println("NULL")	;
 				return false;
 
 				}
@@ -394,13 +394,13 @@ public class Board
 
 				if (r < 0 || r >= rows || c < 0 || c >= columns)
 				{
-					//Do nothing and let it push off the wall
+					return false;//Do nothing and let it push off the wall
 				}
 				 //System.out.println("Row:" + r + "Column" + c );
 				 //System.out.println("PIVOT- r: "+ current.pivotCell.row + "c: " + current.pivotCell.column);
 				else if (isActive[(int)r][(int)c])
 				{
-					System.out.println("FAIL")	;
+					//System.out.println("FAIL")	;
 					return false;
 				}
 			// }
@@ -525,8 +525,8 @@ public class Board
 	 */
 	void deleteRow(int row)
 	{
-		System.out.println("ROW TO DELETE: " + row);
-		System.out.println("	Board size before delete: " + board.size());
+		//System.out.println("ROW TO DELETE: " + row);
+		//System.out.println("	Board size before delete: " + board.size());
 		// for (int i = 0; i < columns; i++)
 		// {
 		// 	isActive[row][i] = false;
@@ -541,8 +541,8 @@ public class Board
 		}
 
 		setActive();
-		System.out.println("	Board size after delete: " + board.size());
-		printBoard();
+		//System.out.println("	Board size after delete: " + board.size());
+		//printBoard();
 	}
 
 	/**
@@ -566,7 +566,7 @@ public class Board
 			}
 		}
 
-		System.out.println("ROW TO PACK: " + row);
+		//System.out.println("ROW TO PACK: " + row);
 		// for(Cell cell : board)
 		// {
 		// 	if(cell.row > row)
@@ -590,7 +590,7 @@ public class Board
 		// }
 
 		setActive();
-		printBoard();
+		//printBoard();
 	}
 
 	int checkAndDeleteFlood()
@@ -660,7 +660,7 @@ public class Board
 			}
 		}
 
-		System.out.println("ROW TO PACK: " + row);
+		//System.out.println("ROW TO PACK: " + row);
 	
 		setActive();
 	}
@@ -690,7 +690,7 @@ public class Board
 		while(collisionOnNext())
 		{
 			collisionFlag = true;
-			System.out.println("Collision whiling?");
+			//System.out.println("Collision whiling?");
 			for(Cell cell : next.pieces)
 			{
 				cell.row++;
@@ -773,7 +773,7 @@ public class Board
 		setCurrent();
 
 		//Update the board
-		printBoard();
+		//printBoard();
 
 		//Get the total number of lines deleted
 		int lineCleared;

@@ -19,7 +19,7 @@ class GameTimer implements Runnable {
         {
             if(!gui.pause)
                 gui.updateTime(seconds++);
-            System.out.println(seconds);
+            //System.out.println(seconds);
             try
             {
                 thread.sleep(1000);
