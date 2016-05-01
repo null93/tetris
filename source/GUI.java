@@ -314,7 +314,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		//
 		if(!this.board.isGameOver && !this.pause)
 		{
-			this.board.current.rotate(Tetromino.Rotation.LEFT);
+			this.board.rotateLeft();
 			this.renderBoard();
 		}
 	}
@@ -331,7 +331,7 @@ public class GUI extends Display implements ActionListener, KeyListener {
 		//
 		if(!this.board.isGameOver && !this.pause)
 		{
-			this.board.current.rotate(Tetromino.Rotation.RIGHT);
+			this.board.rotateRight();
 			this.renderBoard();
 		}
 	}

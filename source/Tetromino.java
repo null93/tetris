@@ -94,6 +94,8 @@ public class Tetromino
 		// }
 		for(Cell cell : pieces)
 			cell.row--;
+		if (pivotCell != null)
+			pivotCell = pieces.get(1);
 	}
 
 	//Assuming the coordinate 0, 0 is at bottom-left
@@ -107,6 +109,8 @@ public class Tetromino
 
 		for(Cell cell : pieces)
 			cell.column--;
+		if (pivotCell != null)
+			pivotCell = pieces.get(1);
 	}
 
 	//Assuming the coordinate 0, 0 is at bottom-left
@@ -119,6 +123,8 @@ public class Tetromino
 		// }
 		for(Cell cell : pieces)
 			cell.column++;
+		if (pivotCell != null)
+			pivotCell = pieces.get(1);
 	}
 
 	enum Rotation{

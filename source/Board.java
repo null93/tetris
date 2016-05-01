@@ -299,6 +299,118 @@ public class Board
 		return true;
 	}
 
+	boolean rotateRight()
+	{
+		//If the current can move down
+		for (Cell piece : current.pieces)
+		{
+			// //Transverse through the board to check
+			// for (Cell cell : board)
+			// {
+				//Out of boundaries
+				// if ((piece.column + 1) >= columns)
+				// 	return false;
+
+				// //A current cell exist there																							//May be needed for deleted cell
+				// if ((board.get(i).row == current.pieces.get(i).row - 1) && (board.get(i).column == current.pieces.get(i).column))		// && (board.get(i).type == Shape.E))
+				// 	return false;
+				if(current.pivotCell == null)
+				{
+				System.out.println("NULL")	;
+				return false;
+
+				}
+				double vrpCol = piece.column - current.pivotCell.column;
+				double vrpRow = piece.row - current.pivotCell.row;
+
+				// Rotate the relative vector 
+				// [ a b ] [ vrpCol ] = [ vrpCol * a + vrpRow * b ] -> a and d are 0: [ vrpRow * b]
+				// [ c d ] [ vrpRow ]   [ vrpCol * c + vrpRow * d ]                   [ vrpCol * c]
+
+				double vRotatedCol = vrpRow * 1;
+				double vRotatedRow = vrpCol * -1;
+
+				// Change back the vector to be relative of origin
+				// VrelativetoO = [ vRotatedCol + pivotCell.column ]
+				//                [ vRotatedRow + pivotCell.row    ]
+				double c = vRotatedCol + current.pivotCell.column;
+				double r = vRotatedRow + current.pivotCell.row;
+
+				if (r < 0 || r >= rows || c < 0 || c >= columns)
+				{
+					//Do nothing and let it push off the wall
+				}
+				 //System.out.println("Row:" + r + "Column" + c );
+				 //System.out.println("PIVOT- r: "+ current.pivotCell.row + "c: " + current.pivotCell.column);
+				else if (isActive[(int)r][(int)c])
+				{
+					System.out.println("FAIL")	;
+					return false;
+				}
+			// }
+
+		}
+		//If we arrived here we pass all test and move piece down
+		current.rotate(Tetromino.Rotation.RIGHT);
+		return true;
+	}
+
+	boolean rotateLeft()
+	{
+		//If the current can move down
+		for (Cell piece : current.pieces)
+		{
+			// //Transverse through the board to check
+			// for (Cell cell : board)
+			// {
+				//Out of boundaries
+				// if ((piece.column + 1) >= columns)
+				// 	return false;
+
+				// //A current cell exist there																							//May be needed for deleted cell
+				// if ((board.get(i).row == current.pieces.get(i).row - 1) && (board.get(i).column == current.pieces.get(i).column))		// && (board.get(i).type == Shape.E))
+				// 	return false;
+				if(current.pivotCell == null)
+				{
+				System.out.println("NULL")	;
+				return false;
+
+				}
+				double vrpCol = piece.column - current.pivotCell.column;
+				double vrpRow = piece.row - current.pivotCell.row;
+
+				// Rotate the relative vector 
+				// [ a b ] [ vrpCol ] = [ vrpCol * a + vrpRow * b ] -> a and d are 0: [ vrpRow * b]
+				// [ c d ] [ vrpRow ]   [ vrpCol * c + vrpRow * d ]                   [ vrpCol * c]
+
+				double vRotatedCol = vrpRow * -1;
+				double vRotatedRow = vrpCol * 1;
+
+				// Change back the vector to be relative of origin
+				// VrelativetoO = [ vRotatedCol + pivotCell.column ]
+				//                [ vRotatedRow + pivotCell.row    ]
+				double c = vRotatedCol + current.pivotCell.column;
+				double r = vRotatedRow + current.pivotCell.row;
+
+				if (r < 0 || r >= rows || c < 0 || c >= columns)
+				{
+					//Do nothing and let it push off the wall
+				}
+				 //System.out.println("Row:" + r + "Column" + c );
+				 //System.out.println("PIVOT- r: "+ current.pivotCell.row + "c: " + current.pivotCell.column);
+				else if (isActive[(int)r][(int)c])
+				{
+					System.out.println("FAIL")	;
+					return false;
+				}
+			// }
+
+		}
+		//If we arrived here we pass all test and move piece down
+		current.rotate(Tetromino.Rotation.LEFT);
+		return true;
+	}
+
 	/**
 	 * This function will get information from the board, and set them to
 	 * its proper statement depending on if there is an active piece on the grid.
