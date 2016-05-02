@@ -12,7 +12,29 @@ public class Shadow
 
         for(Cell piece : shadowing)
         {
-            pieces.add(new Cell(Shape.Default, piece.row, piece.column));
+                if (piece.type == Shape.I)
+                    pieces.add(new Cell(Shape.ISHADOW, piece.row, piece.column));
+                
+                else if (piece.type == Shape.T)
+                    pieces.add(new Cell(Shape.TSHADOW, piece.row, piece.column));
+                
+                else if (piece.type == Shape.O)
+                    pieces.add(new Cell(Shape.OSHADOW, piece.row, piece.column));
+                
+                else if (piece.type == Shape.L)
+                    pieces.add(new Cell(Shape.LSHADOW, piece.row, piece.column));
+                
+                else if (piece.type == Shape.J)
+                    pieces.add(new Cell(Shape.JSHADOW, piece.row, piece.column));
+                
+                else if (piece.type == Shape.S)
+                    pieces.add(new Cell(Shape.SSHADOW, piece.row, piece.column));
+                
+                else if (piece.type == Shape.Z)
+                    pieces.add(new Cell(Shape.ZSHADOW, piece.row, piece.column));
+                
+                else
+                    pieces.add(new Cell(Shape.Default, piece.row, piece.column));
         }
 
 
