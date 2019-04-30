@@ -1,1 +1,6 @@
-*.class
+# Directories
+/target/
+/var/
+
+# Files
+.DS_Store
